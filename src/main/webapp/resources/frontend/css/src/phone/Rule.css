@@ -1,0 +1,127 @@
+body{
+    margin: 0px auto;
+    padding: 0px;
+    font-size: 14px;
+    font-family: "Arail","Microsoft YaHei","Heiti";
+    padding-top:90px;
+    display: flex;
+    min-height: 83vh;
+    flex-direction: column;
+}
+ul{
+    margin: 0px;
+    padding: 0px;
+}
+li{
+    list-style: none;
+    display: inline-block;
+}
+a{
+    text-decoration: none;
+}
+input:focus{
+    outline: none;
+}
+img{
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none;
+}
+.JMRule{
+	    padding-bottom: 90px;
+}
+.JMRuleTip{
+    position: fixed;
+    right: 5%;
+    top:40%;
+    border-left:1px solid #6d6d6d;
+    padding: 30px 0px;
+}
+.JMRuleTip .JMItem{
+    display: block;
+    list-style: square;
+    margin: 20px 0px;
+    padding-left: 30px;
+    position: relative;
+    cursor: pointer;
+}
+.JMRuleTip .JMItem:before{
+    content: "";
+    border:1px solid #6d6d6d;
+    background: #fff;
+    border-radius: 20px;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    left:-6.5px;
+    top:5px;
+}
+.JMRuleTip .JMItem .JMLink{
+    color: #6d6d6d;
+}
+.JMRuleTip .JMItem.JMActive .JMLink{
+    color: #47a8a9;
+    font-weight: bold;
+}
+
+.JMRuleTip .JMItem.JMActive:before{
+    border:2px solid #47a8a9;
+}
+
+/*正文文本*/
+.JMRuleDetail{
+    margin: 15px auto;
+}
+.JMRuleDetail .JMSection{
+	margin-right: 20%;
+}
+.JMRuleDetail .JMTitle{
+	margin-left:10px;
+}
+.JMRuleDetail .JMTitle .JMNum{
+    font-size: 40px;
+    color: #47a8a9;
+    vertical-align: top;
+    line-height: 45px;
+    margin-right: 5px;
+}
+.JMRuleDetail .JMTitle .JMText{
+    font-size: 23px;
+    color: #47a8a9;
+    position: relative;
+}
+.JMRuleDetail .JMTitle .JMText:before{
+    content: "";
+    position: absolute;
+    bottom:-10px;
+    left:0px;
+    width: 50px;
+}
+.JMRuleDetail .JMContent{
+    margin-left:40px;
+    font-size: 14px;
+    line-height: 1.5em;
+    width:100%;
+}
+.JMRuleDetail .JMContent .JMText{
+    color:#656564;
+}
+.JMRuleDetail .JMContent .JMSubTitle{
+    border-left:2px solid #47a8a9;
+    color: #47a8a9;
+    font-weight: bold;
+    padding-left: 15px;
+    font-size: 14px;
+    margin: 10px 0px;
+}
+.JMRuleDetail .JMContent .JMSubTitle+.JMText{
+    
+}
+.JMRuleDetail hr{
+    width: 80%;
+    height: 2px;
+    background: #47a8a9;
+    margin: 15px auto;
+    border: 0px;
+}

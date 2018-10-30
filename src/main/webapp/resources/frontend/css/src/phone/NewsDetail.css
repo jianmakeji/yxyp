@@ -1,0 +1,44 @@
+.zyPostDetail{
+	margin:110px auto 110px;
+}
+.zyPostDetail .zyTitle{
+    color: #47a8a9;
+    font-size: 20px;
+    margin: 0px 20px;
+    text-align:center;
+    word-break: break-all;
+
+    text-overflow: ellipsis;
+
+    display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+
+    -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+
+    -webkit-line-clamp: 2; /** 显示的行数 **/
+
+    overflow: hidden;  /** 隐藏超出的内容 **/
+}
+.zyPostDetail .zyDate{
+    color: #6d6d6d;
+    font-size: 14px;
+    margin: 10px 0px;
+    text-align:center;
+}
+.zyPostDetail .zyContent{
+	width:90%;
+	margin:0 auto;
+}
+.zyPostDetail .zyContent img{
+	width: 80%;
+    height: auto;
+    margin: 5px auto;
+}
+.zyPostDetail .zyContent p{
+    font-size: 15px;
+    text-indent: 2em;
+    line-height: 1.5em;
+}
+.zyPostDetail .zyContent p span{
+    line-height: 26px;
+    font-size:15px;
+}
