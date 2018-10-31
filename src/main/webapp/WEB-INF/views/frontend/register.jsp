@@ -7,7 +7,6 @@
 
 <%@ include file="../head.jsp"%>
 
-<link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/register.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
@@ -22,11 +21,11 @@
 
 	<%@ include file="header.jsp"%>
 	<div class="register" style="margin-top:200px;">
-		<i-form :model="formItem" :label-width="100" :rules="ruleValidate">
-			<form-item>
-		        <radio-group v-model="button1" type="button" @on-change="radioChange">
-			        <radio label="手机验证" value="0"></radio>
-			        <radio label="邮箱验证" value="1"></radio>
+		<i-form ref="formItem" :model="formItem" :label-width="100" :rules="ruleValidate">
+			<form-item label="注册方式">
+		        <radio-group v-model="formItem.mobileOrEmail" type="button" @on-change="radioChange">
+			        <radio label="1" value="1">短信验证</radio>
+			        <radio label="0" value="0">邮箱验证</radio>
 			    </radio-group>
 	        </form-item>
 	        <form-item label="邮箱" prop="email">
@@ -40,7 +39,7 @@
 	        </form-item>
 	        <form-item label="短信验证码" v-if="showMobileCode"  prop="mobileCode">
 	            <i-input type="text" v-model="formItem.mobileCode" @on-blur="checkMobileCode" style="width:200px;" placeholder="验证码"></i-input>
-	        	<i-button type="info" :disabled="disableBtn" @click="sendAcodeStg">{{mobileCodeText}}</i-button>
+	        	<i-button type="default" :disabled="disableBtn" @click="sendAcodeStg">{{mobileCodeText}}</i-button>
 	        </form-item>
 	        <form-item label="地址">
 	            <i-input type="text" v-model="formItem.address" placeholder="请输入地址"></i-input>
@@ -56,7 +55,7 @@
 	            <img :src="imgSrc" class="zyActiveCode" @click="tapClick">
 	        </form-item>
 	        <form-item>
-	            <i-button type="primary" long :disabled="disableSbt">提交</i-button>
+	            <i-button type="primary" long :disabled="disableSbt" @click="submit('formItem')">提交</i-button>
 	        </form-item>
 	    </i-form>
 	</div> 
@@ -68,12 +67,12 @@
 	</script>
 
 	<script src="resources/js/lib/jquery-1.10.2.min.js"></script>
-	<script src="resources/js/lib/jquery.toastmessage.js"></script>
+	<!-- <script src="resources/js/lib/jquery.toastmessage.js"></script>
 	<script src="resources/js/lib/jquery.serialize-object.min.js"></script>
-	<script src="resources/js/lib/jquery.validate.min.js"></script>
+	<script src="resources/js/lib/jquery.validate.min.js"></script> -->
 	<script src="resources/frontend/js/src/config.js"></script>
-	<script src="resources/js/src/functions.js"></script>
-	<script src="resources/js/src/ZYFormHandler.js"></script>
+<!-- 	<script src="resources/js/src/functions.js"></script>
+	<script src="resources/js/src/ZYFormHandler.js"></script> -->
 	<script src="resources/frontend/js/src/header.js"></script>
 	<script src="resources/frontend/js/src/register.js"></script>
 </body>

@@ -33,6 +33,6 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Github/Github/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
+	<classpathentry kind="lib" path="C:/Users/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
