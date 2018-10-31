@@ -49,12 +49,14 @@ public class SmsMessageDaoImpl implements SmsMessageDao {
 	@Override
 	public Optional<SmsMessage> vertifyCodeByCondition(String code,  String mobile, String remoteAddress, String remoteHost) {
 		Session session = sessionFactory.getCurrentSession();
-		String hql = " from SmsMessage where code = ? and mobile = ?　and remoteAddress = ? and remoteHost = ? ";
+		String hql = " from SmsMessage where code = ? and mobile = ? and remoteAddress = ? and remoteHost = ? ";
 		Query query = session.createQuery(hql);
+		
 		query.setParameter(0, code);
 		query.setParameter(1, mobile);
 		query.setParameter(2, remoteAddress);
 		query.setParameter(3, remoteHost);
+		
 		List<SmsMessage> list = query.list();
 		if (list.size() > 0) {
 			Optional<SmsMessage> smsMessage = Optional.ofNullable(list.get(0));
