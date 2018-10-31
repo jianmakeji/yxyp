@@ -68,11 +68,11 @@ public class SmsMessageDaoImpl implements SmsMessageDao {
 	public int countSendMessageOneDay(String remoteAddress, String remoteHost) {
 		String date = DateUtil.beforeDaytime(1);
 		Session session = sessionFactory.getCurrentSession();
-		String hql = " select count(*) from SmsMessage where remoteAddress = ? and remoteHost = ? and createtime > ";
+		String hql = " select count(*) from SmsMessage where remoteAddress = ? and remoteHost = ? and createtime > ?";
 		Query query = session.createQuery(hql);
 		query.setParameter(0, remoteAddress);
 		query.setParameter(1, remoteHost);
-		query.setParameter(2, date);
+		query.setParameter(2, DateUtil.stringToDate(date));
 		return (int)((Long)query.uniqueResult()).longValue();
 	}
 

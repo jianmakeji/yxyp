@@ -54,6 +54,15 @@ public class DateUtil {
 		t = d.format(c.getTime());
 		return t;
 	}
+	
+	public static Date stringToDate(String date){
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			return sdf.parse(date);
+		} catch (ParseException e) {
+			return null;
+		}
+	}
 
 	public static void main(String[] args) {
 		// System.out.println(compareDate("2017-08-30"));

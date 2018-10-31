@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.jianma.yxyp.DcController;
 import com.jianma.yxyp.model.ResultModel;
 import com.jianma.yxyp.model.SmsMessage;
-import com.jianma.yxyp.service.impl.SmsMessageServiceImpl;
+import com.jianma.yxyp.service.SmsMessageService;
 
 @Controller
 @RequestMapping(value = "/sms")
@@ -25,7 +25,7 @@ public class SmsController extends DcController {
 
 	@Autowired
 	@Qualifier(value = "smsMessageServiceImpl")
-	private SmsMessageServiceImpl smsMessageServiceImpl;
+	private SmsMessageService smsMessageServiceImpl;
 	
 	@RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
 	public @ResponseBody  ResultModel sendMessage(HttpServletRequest request, HttpServletResponse response,Locale locale, Model model) {
@@ -43,7 +43,7 @@ public class SmsController extends DcController {
 		return resultModel;
 	}
 	
-	@RequestMapping(value = "/sendMessage", method = RequestMethod.GET)
+	@RequestMapping(value = "/vertifyCode", method = RequestMethod.GET)
 	public @ResponseBody  ResultModel vertifyCode(HttpServletRequest request, HttpServletResponse response,Locale locale, Model model) {
 		
 		String sendMobile = request.getParameter("mobile");
