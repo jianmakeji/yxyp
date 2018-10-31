@@ -77,50 +77,54 @@ public class UserServiceImpl implements UserService {
 				userRole.setRole(role);
 				userRoles.add(userRole);
 				user.setUserRoles(userRoles);
+				
+				if (user.getMobileOrEmail() == 0){
+					StringBuffer sBuilder = new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
+					sBuilder.append("<a href=\"" + configInfo.email_active_url + "/user/active?email=");
+					sBuilder.append(user.getEmail());
+					sBuilder.append("&activeCode=");
+					sBuilder.append(user.getActivecode());
+					sBuilder.append("\">激活账号：" + user.getEmail());
+					sBuilder.append("</a>");
+
+					MailBean mailBean = new MailBean();
+					mailBean.setContext(sBuilder.toString());
+					mailBean.setFrom(configInfo.email_active_from);
+					mailBean.setFromName(configInfo.email_active_from_name);
+					mailBean.setSubject(configInfo.email_active_subject);
+					mailBean.setToEmails(new String[] { user.getEmail() });
+					
+					//记录邮件发送日志
+					SendEmail sendEmail = new SendEmail();
+					sendEmail.setEmail(user.getEmail());
+					sendEmail.setCreatetime(new Date());
+					try {
+						mailServiceImpl.sendMail(mailBean);
+						sendEmail.setSign((byte)1);
+					} catch(AuthenticationFailedException e){
+						sendEmail.setSign((byte)3);
+						sendEmail.setRemark("发送邮箱身份验证异常");
+					}catch(SMTPSendFailedException e){
+						sendEmail.setSign((byte)4);
+						sendEmail.setRemark("SMTPSendFailedException");
+					}
+					catch (UnsupportedEncodingException e) {
+						sendEmail.setSign((byte)2);
+						sendEmail.setRemark("不支持的内容编码格式");
+					} catch (MessagingException e) {
+						sendEmail.setRemark("MessagingException");
+						sendEmail.setSign((byte)2);
+					}catch (Exception e){
+						sendEmail.setRemark("其它错误");
+						sendEmail.setSign((byte)5);
+						e.printStackTrace();
+					}
+					sendEmailDaoImpl.createSendEmail(sendEmail);
+				}
+				else{
+					user.setActivesign((byte)1);
+				}
 				userDaoImpl.createUser(user);
-
-				StringBuffer sBuilder = new StringBuffer("点击下面链接激活账号，48小时生效，否则重新注册账号，链接只能使用一次，请尽快激活！</br>");
-				sBuilder.append("<a href=\"" + configInfo.email_active_url + "/user/active?email=");
-				sBuilder.append(user.getEmail());
-				sBuilder.append("&activeCode=");
-				sBuilder.append(user.getActivecode());
-				sBuilder.append("\">激活账号：" + user.getEmail());
-				sBuilder.append("</a>");
-
-				MailBean mailBean = new MailBean();
-				mailBean.setContext(sBuilder.toString());
-				mailBean.setFrom(configInfo.email_active_from);
-				mailBean.setFromName(configInfo.email_active_from_name);
-				mailBean.setSubject(configInfo.email_active_subject);
-				mailBean.setToEmails(new String[] { user.getEmail() });
-				
-				//记录邮件发送日志
-				SendEmail sendEmail = new SendEmail();
-				sendEmail.setEmail(user.getEmail());
-				sendEmail.setCreatetime(new Date());
-				try {
-					mailServiceImpl.sendMail(mailBean);
-					sendEmail.setSign((byte)1);
-				} catch(AuthenticationFailedException e){
-					sendEmail.setSign((byte)3);
-					sendEmail.setRemark("发送邮箱身份验证异常");
-				}catch(SMTPSendFailedException e){
-					sendEmail.setSign((byte)4);
-					sendEmail.setRemark("SMTPSendFailedException");
-				}
-				catch (UnsupportedEncodingException e) {
-					sendEmail.setSign((byte)2);
-					sendEmail.setRemark("不支持的内容编码格式");
-				} catch (MessagingException e) {
-					sendEmail.setRemark("MessagingException");
-					sendEmail.setSign((byte)2);
-				}catch (Exception e){
-					sendEmail.setRemark("其它错误");
-					sendEmail.setSign((byte)5);
-					e.printStackTrace();
-				}
-				sendEmailDaoImpl.createSendEmail(sendEmail);
-				
 				return ResponseCodeUtil.UESR_OPERATION_SUCESS;
 			}
 		} catch (Exception e) {
