@@ -39,4 +39,13 @@ public class ConfigInfo {
 	
 	@Value("${bucket}")
 	public String bucket;
+	
+	@Value("${sms_account_sid}")
+	public String sms_account_sid;
+	
+	@Value("${sms_auth_token}")
+	public String sms_auth_token;
+	
+	@Value("${sms_app_id}")
+	public String sms_app_id;
 }
