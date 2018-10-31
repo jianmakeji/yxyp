@@ -42,6 +42,13 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.http.MethodType;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
 import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.jianma.yxyp.exception.ServerException;
 import com.jianma.yxyp.model.News;
@@ -351,6 +358,83 @@ public class HomeController extends DcController {
             
             return null;
         }
+        
+	}
+	
+	@RequestMapping(value = "/sigUploadKey/{type}", method = RequestMethod.GET)
+	public @ResponseBody  Map<String, String> sigUploadKey(HttpServletRequest request,HttpServletResponse response,Locale locale, Model model, @PathVariable int type) {
+		
+		String endpoint = configInfo.endpoint;
+        String accessId = configInfo.accessId;
+        String accessKey = configInfo.accessKey;
+        String bucket = configInfo.bucket;
+        String dir = "";
+        String roleArn = "cidic-oss-role";
+        String roleSessionName = "acs:ram::1455326322404332:role/cidic-oss-role";
+        String policy = "{"
+        		+ " \"Statement\": ["
+        		+ " {\"Action\": \"sts:AssumeRole\","
+        		+ " \"Effect\": \"Allow\","
+        		+ " \"Principal\": {\"RAM\": [\"acs:ram::1455326322404332:root\"]"
+        		+ " }"
+        		+ " }"
+        		+ " ],"
+        		+ " \"Version\": \"1\""
+        		+ " }";
+        
+        if (type == 1){
+        	dir = "product/";
+        }
+        else if (type == 2){
+        	dir = "news/";
+        }
+        else if (type == 3){
+        	dir = "judges/";
+        }
+        else if (type == 4){
+        	dir = "others/";
+        }
+        else if (type == 5){
+        	dir = "attachment/";
+        }
+        
+        String host = "http://" + bucket + "." + endpoint;
+       
+        try {
+            DefaultProfile.addEndpoint("", "Sts", endpoint);
+            // 构造default profile（参数留空，无需添加region ID）
+            IClientProfile profile = DefaultProfile.getProfile("", accessId, accessKey);
+            // 用profile构造client
+            DefaultAcsClient client = new DefaultAcsClient(profile);
+            final AssumeRoleRequest assumeRequest = new AssumeRoleRequest();
+            assumeRequest.setMethod(MethodType.POST);
+            assumeRequest.setRoleArn(roleArn);
+            assumeRequest.setRoleSessionName(roleSessionName);
+            assumeRequest.setPolicy(policy); // Optional
+            final AssumeRoleResponse assumeResponse = client.getAcsResponse(assumeRequest);
+            System.out.println("Expiration: " + assumeResponse.getCredentials().getExpiration());
+            System.out.println("Access Key Id: " + assumeResponse.getCredentials().getAccessKeyId());
+            System.out.println("Access Key Secret: " + assumeResponse.getCredentials().getAccessKeySecret());
+            System.out.println("Security Token: " + assumeResponse.getCredentials().getSecurityToken());
+            System.out.println("RequestId: " + assumeResponse.getRequestId());
+            
+            Map<String, String> respMap = new HashMap<String, String>();
+            respMap.put("accessid", assumeResponse.getCredentials().getAccessKeyId());
+            respMap.put("signature", assumeResponse.getCredentials().getSecurityToken());
+            respMap.put("dir", dir);
+            respMap.put("host", host);
+            respMap.put("expire", assumeResponse.getCredentials().getExpiration());
+            return respMap;
+            
+        } catch (ClientException e) {
+            System.out.println("Failed：");
+            System.out.println("Error code: " + e.getErrCode());
+            System.out.println("Error message: " + e.getErrMsg());
+            System.out.println("RequestId: " + e.getRequestId());
+            return null;
+        }
+        
+        
         
 	}
 	
