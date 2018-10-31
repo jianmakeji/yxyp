@@ -39,6 +39,7 @@ public class User implements java.io.Serializable {
 	private String slot;
 	private String activecode;
 	private byte activesign;
+	private byte mobileOrEmail;
 	
 	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
@@ -181,4 +182,15 @@ public class User implements java.io.Serializable {
 	public String getCredentialsSalt() {
 		return email + slot;
 	}
+
+	@Transient
+	public byte getMobileOrEmail() {
+		return mobileOrEmail;
+	}
+
+	public void setMobileOrEmail(byte mobileOrEmail) {
+		this.mobileOrEmail = mobileOrEmail;
+	}
+	
+	
 }
