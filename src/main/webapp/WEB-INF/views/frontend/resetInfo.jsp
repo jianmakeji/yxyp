@@ -11,6 +11,7 @@
 <link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/pageMenu.css" type="text/css" rel="stylesheet">
 </head>
 <body style="max-width:none;">
 

@@ -1,0 +1,60 @@
+body{
+	padding: 0;
+}
+.zyTable{
+    border-spacing:0px 0px;
+    width: 100%;
+}
+.zyTable th{
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    font-weight: normal;
+}
+.zyTable tbody tr:nth-child(odd){
+    text-align: center;
+    margin-bottom: 10px;
+    background: #f4f4f4;
+}
+.zyTable tbody tr:nth-child(even){
+    text-align: center;
+    margin-bottom: 10px;
+    background: #ffffff;
+}
+.zyTable .zyAction{
+    width: 25px;
+    height: 35px;
+    display: inline-block;
+    font-size: 0px;
+    vertical-align:middle;
+}
+
+#kkpager{
+	margin:50px auto;
+    font-size: 14px;
+}
+#kkpager>div{
+    text-align: center;
+}
+#kkpager .pageBtnWrap{
+    display: inline-block;
+    margin: 30px auto;
+    float: none;
+}
+#kkpager span.curr{
+    border: none;
+    color: #47a8a9;
+    background: none;
+}
+#kkpager a{
+    border: none;
+    color: #6d6d6d;
+}
+#kkpager span.disabled{
+    border: none;
+}
+#kkpager a:hover{
+    background: none;
+    color: #47a8a9;
+    border: none;
+}

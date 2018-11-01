@@ -45,17 +45,19 @@ import com.aliyun.oss.model.PolicyConditions;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.http.MethodType;
+import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
+import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse.Credentials;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
-import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import com.jianma.yxyp.exception.ServerException;
 import com.jianma.yxyp.model.News;
 import com.jianma.yxyp.model.ResultModel;
 import com.jianma.yxyp.service.JudgeService;
 import com.jianma.yxyp.service.NewsService;
 import com.jianma.yxyp.service.UserService;
+import com.jianma.yxyp.util.AliOssUtil;
 import com.jianma.yxyp.util.ConfigInfo;
 
 /**
@@ -116,6 +118,11 @@ public class HomeController extends DcController {
 	@RequestMapping(value = "/error")
 	public String error(HttpServletRequest request, Model model) {
 		return "error";
+	}
+	
+	@RequestMapping(value = "/home")
+	public String home(HttpServletRequest request, Model model) {
+		return "home";
 	}
 
 	@RequestMapping(value = "/index")
@@ -369,18 +376,8 @@ public class HomeController extends DcController {
         String accessKey = configInfo.accessKey;
         String bucket = configInfo.bucket;
         String dir = "";
-        String roleArn = "cidic-oss-role";
-        String roleSessionName = "acs:ram::1455326322404332:role/cidic-oss-role";
-        String policy = "{"
-        		+ " \"Statement\": ["
-        		+ " {\"Action\": \"sts:AssumeRole\","
-        		+ " \"Effect\": \"Allow\","
-        		+ " \"Principal\": {\"RAM\": [\"acs:ram::1455326322404332:root\"]"
-        		+ " }"
-        		+ " }"
-        		+ " ],"
-        		+ " \"Version\": \"1\""
-        		+ " }";
+        String roleArn = "acs:ram::1455326322404332:role/cidic-oss-role";
+        String roleSessionName = "cidic-oss-role";
         
         if (type == 1){
         	dir = "product/";
@@ -400,42 +397,28 @@ public class HomeController extends DcController {
         
         String host = "http://" + bucket + "." + endpoint;
        
+        //String policy = "{\"Version\": \"1\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"oss:DeleteObject\",\"oss:ListParts\",\"oss:AbortMultipartUpload\","
+        //		+ "\"oss:PutObject\",\"oss:GetObject\"],\"Resource\": [\"acs:oss:*:*:dc-yxyp\",\"acs:oss:*:*:dc-yxyp/*\"]}]}";
+        String policy = null;
         try {
-            DefaultProfile.addEndpoint("", "Sts", endpoint);
-            // 构造default profile（参数留空，无需添加region ID）
-            IClientProfile profile = DefaultProfile.getProfile("", accessId, accessKey);
-            // 用profile构造client
-            DefaultAcsClient client = new DefaultAcsClient(profile);
-            final AssumeRoleRequest assumeRequest = new AssumeRoleRequest();
-            assumeRequest.setMethod(MethodType.POST);
-            assumeRequest.setRoleArn(roleArn);
-            assumeRequest.setRoleSessionName(roleSessionName);
-            assumeRequest.setPolicy(policy); // Optional
-            final AssumeRoleResponse assumeResponse = client.getAcsResponse(assumeRequest);
-            System.out.println("Expiration: " + assumeResponse.getCredentials().getExpiration());
-            System.out.println("Access Key Id: " + assumeResponse.getCredentials().getAccessKeyId());
-            System.out.println("Access Key Secret: " + assumeResponse.getCredentials().getAccessKeySecret());
-            System.out.println("Security Token: " + assumeResponse.getCredentials().getSecurityToken());
-            System.out.println("RequestId: " + assumeResponse.getRequestId());
-            
-            Map<String, String> respMap = new HashMap<String, String>();
-            respMap.put("accessid", assumeResponse.getCredentials().getAccessKeyId());
-            respMap.put("signature", assumeResponse.getCredentials().getSecurityToken());
+        	 long expired = 3600;
+        	AssumeRoleResponse assumeResponse = AliOssUtil.assumeRole(accessId,accessKey, roleArn, 
+                    roleSessionName, policy, expired, ProtocolType.HTTPS);
+            Credentials credentials = assumeResponse.getCredentials();
+           
+            Map<String, String> respMap = new LinkedHashMap<String, String>();
+            respMap.put("accessKeyId", credentials.getAccessKeyId());
+            respMap.put("accessKeySecret", credentials.getAccessKeySecret());
+            respMap.put("securityToken", credentials.getSecurityToken());
             respMap.put("dir", dir);
             respMap.put("host", host);
-            respMap.put("expire", assumeResponse.getCredentials().getExpiration());
             return respMap;
-            
         } catch (ClientException e) {
-            System.out.println("Failed：");
-            System.out.println("Error code: " + e.getErrCode());
-            System.out.println("Error message: " + e.getErrMsg());
-            System.out.println("RequestId: " + e.getRequestId());
-            return null;
-        }
+        	e.printStackTrace();
+    	}
         
         
-        
+        return null;
 	}
 	
 }

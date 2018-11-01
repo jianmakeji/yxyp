@@ -1,4 +1,4 @@
-var attachUrl = ""; 
+/*var attachUrl = ""; 
 var uploadWork = (function (config, functions) {
     return {
         
@@ -205,9 +205,9 @@ $(document).ready(function () {
     	$().toastmessage("showErrorToast", config.messages.uploadIOError);
     });
     //最后给"开始上传"按钮注册事件
-    document.getElementById('upload-btn').onclick = function(){
-        uploader.start(); 
-    }
+//    document.getElementById('upload-btn').onclick = function(){
+//        uploader.start(); 
+//    }
 	
     var submitUrl = config.ajaxUrls.workCreate;
     juicer.set({
@@ -318,4 +318,112 @@ $(document).ready(function () {
     	}
     });
 
-});
+});*/
+
+var uploadWork = new Vue({
+	el:".uploadWork",
+	data:function(){
+		return{
+			current:0,
+			step:"1",						//控制到了第几步
+			participantName:"姓名",
+			participantIdNumber:"身份证或护照号",
+			idNamePlaceholder:"请输入身份证或护照号",
+			formItem:{
+				participant_type:"1",		//参与者类型
+				participant_name:"",		//参与者姓名
+				participant_id_number:"",	//身份证号码
+				participant_brief:"",		//公司简介
+				
+				affiliatedUnit:"",			//所属单位---选择公司时隐藏
+				team_member:"",				//队员姓名---选择团队时显示
+				
+				title:"",					//作品标题
+				title_en:"",				//作品英文标题
+				content:"",					//作品内容
+				content_en:"",				//作品英文标题
+				adviser:"",					//指导老师
+				groupNum:"1",				//组别
+				subGroupNum:"1"				//作品类型
+			},
+			imgUrl_1:"",
+			progressPercent_1:0,	
+//			imgUrl_2:"",
+//			progressPercent_2:0,
+//			imgUrl_3:"",
+//			progressPercent_3:0,		
+		}
+	},
+	methods:{
+		userInfoChange: function (value) {
+            if(value == 1){				//个人
+            	this.participantName = "姓名";
+            	this.participantIdNumber = "证件号";
+            	this.idNamePlaceholder = "请输入身份证或护照号";
+            }else if(value == 2){			//团队
+            	this.participantName = "队长姓名";
+            	this.participantIdNumber = "队长证件号";
+            	this.idNamePlaceholder = "请输入队长身份证或护照号";
+            }else{							//公司
+            	this.participantName = "公司名称";
+            	this.participantIdNumber = "营业执照号";
+            	this.idNamePlaceholder = "请输入公司营业执照号";
+            }
+        },
+        goStep1:function(){
+        	this.step = "1";
+        	this.current = 0;
+        },
+        goStep2:function(){
+        	this.step = "2";
+        	this.current = 1;
+        	console.log(this.formItem);
+        },
+        goStep3:function(){
+        	this.step = "3";
+        	this.current = 2;
+        	console.log(this.formItem);
+        },
+        //上传第一件作品
+        doUpload_1:function(){
+        	
+        },
+        submit:function(){
+        	
+        }
+	}
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
