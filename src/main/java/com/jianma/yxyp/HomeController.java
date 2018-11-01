@@ -4,12 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,19 +36,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.common.utils.BinaryUtil;
-import com.aliyun.oss.model.MatchMode;
-import com.aliyun.oss.model.PolicyConditions;
-import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
-import com.aliyuncs.profile.DefaultProfile;
-import com.aliyuncs.profile.IClientProfile;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse;
 import com.aliyuncs.sts.model.v20150401.AssumeRoleResponse.Credentials;
-import com.aliyuncs.sts.model.v20150401.AssumeRoleRequest;
 import com.jianma.yxyp.exception.ServerException;
 import com.jianma.yxyp.model.News;
 import com.jianma.yxyp.model.ResultModel;
@@ -101,7 +90,7 @@ public class HomeController extends DcController {
 			modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "服务器内部出错了");
+			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
 		}
 	}
 
@@ -139,7 +128,7 @@ public class HomeController extends DcController {
 			modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "服务器内部出错了");
+			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
 		}
 	}
 
@@ -156,11 +145,11 @@ public class HomeController extends DcController {
 			if (subject.isAuthenticated()) {
 
 				try {
-					subject.checkRole("管理员");
+					subject.checkRole("绠＄悊鍛�");
 					return "redirect:/news/newsMgr";
 				} catch (AuthorizationException e) {
 					try {
-						subject.checkRole("评委");
+						subject.checkRole("璇勫");
 						return "redirect:/review/judgeIndex";
 					} catch (AuthorizationException ex) {
 						return "redirect:/production/works";
@@ -171,31 +160,31 @@ public class HomeController extends DcController {
 				return "/frontend/login";
 			}
 		} catch (IncorrectCredentialsException e) {
-			msg = "登录密码错误.";
+			msg = "鐧诲綍瀵嗙爜閿欒.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (ExcessiveAttemptsException e) {
-			msg = "登录失败次数过多";
+			msg = "鐧诲綍澶辫触娆℃暟杩囧";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (LockedAccountException e) {
-			msg = "帐号已被锁定.";
+			msg = "甯愬彿宸茶閿佸畾.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (DisabledAccountException e) {
-			msg = "帐号已被禁用. ";
+			msg = "甯愬彿宸茶绂佺敤. ";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (ExpiredCredentialsException e) {
-			msg = "帐号已过期.";
+			msg = "甯愬彿宸茶繃鏈�.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (UnknownAccountException e) {
-			msg = "帐号不存在.或者未激活";
+			msg = "甯愬彿涓嶅瓨鍦�.鎴栬�呮湭婵�娲�";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (UnauthorizedException e) {
-			msg = "您没有得到相应的授权！";
+			msg = "鎮ㄦ病鏈夊緱鍒扮浉搴旂殑鎺堟潈锛�";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		}
@@ -220,8 +209,8 @@ public class HomeController extends DcController {
 
 				try {
 					
-					subject.checkRole("评委");
-					System.out.println("评审页面");
+					subject.checkRole("璇勫");
+					System.out.println("璇勫椤甸潰");
 					return "redirect:/review/judgeIndex/" + round;
 				} catch (AuthorizationException ex) {
 					return "error";
@@ -231,32 +220,32 @@ public class HomeController extends DcController {
 				return "/frontend/login";
 			}
 		} catch (IncorrectCredentialsException e) {
-			msg = "登录密码错误.";
+			msg = "鐧诲綍瀵嗙爜閿欒.";
 			model.addAttribute("error", msg);
 		} catch (ExcessiveAttemptsException e) {
-			msg = "登录失败次数过多";
+			msg = "鐧诲綍澶辫触娆℃暟杩囧";
 			model.addAttribute("error", msg);
 		} catch (LockedAccountException e) {
-			msg = "帐号已被锁定.";
+			msg = "甯愬彿宸茶閿佸畾.";
 			model.addAttribute("error", msg);
 		} catch (DisabledAccountException e) {
-			msg = "帐号已被禁用. ";
+			msg = "甯愬彿宸茶绂佺敤. ";
 			model.addAttribute("error", msg);
 		} catch (ExpiredCredentialsException e) {
-			msg = "帐号已过期.";
+			msg = "甯愬彿宸茶繃鏈�.";
 			model.addAttribute("error", msg);
 		} catch (UnknownAccountException e) {
-			msg = "帐号不存在.或者未激活";
+			msg = "甯愬彿涓嶅瓨鍦�.鎴栬�呮湭婵�娲�";
 			model.addAttribute("error", msg);
 		} catch (UnauthorizedException e) {
-			msg = "您没有得到相应的授权！";
+			msg = "鎮ㄦ病鏈夊緱鍒扮浉搴旂殑鎺堟潈锛�";
 			model.addAttribute("error", msg);
 		} catch (AuthorizationException e) {
-			msg = "认证失败！";
+			msg = "璁よ瘉澶辫触锛�";
 			model.addAttribute("error", msg);
 		}catch(AuthenticationException e){
 			e.printStackTrace();
-			msg = "认证失败！或者该轮次未绑定评委！";
+			msg = "璁よ瘉澶辫触锛佹垨鑰呰杞鏈粦瀹氳瘎濮旓紒";
 			model.addAttribute("error", msg);
 		}
 		return "/frontend/login";
@@ -308,66 +297,10 @@ public class HomeController extends DcController {
 			//modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "服务器内部出错了");
+			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
 		}
 	}
-	
-	@RequestMapping(value = "/uploadKey/{type}", method = RequestMethod.GET)
-	public @ResponseBody  Map<String, String> uploadKey(HttpServletRequest request,HttpServletResponse response,Locale locale, Model model, @PathVariable int type) {
 		
-		String endpoint = configInfo.endpoint;
-        String accessId = configInfo.accessId;
-        String accessKey = configInfo.accessKey;
-        String bucket = configInfo.bucket;
-        String dir = "";
-        if (type == 1){
-        	dir = "product/";
-        }
-        else if (type == 2){
-        	dir = "news/";
-        }
-        else if (type == 3){
-        	dir = "judges/";
-        }
-        else if (type == 4){
-        	dir = "others/";
-        }
-        else if (type == 5){
-        	dir = "attachment/";
-        }
-        
-        String host = "http://" + bucket + "." + endpoint;
-        OSSClient client = new OSSClient(endpoint, accessId, accessKey);
-        try { 	
-        	long expireTime = 30;
-        	long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
-            Date expiration = new Date(expireEndTime);
-            PolicyConditions policyConds = new PolicyConditions();
-            policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-            policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
-
-            String postPolicy = client.generatePostPolicy(expiration, policyConds);
-            byte[] binaryData = postPolicy.getBytes("utf-8");
-            String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-            String postSignature = client.calculatePostSignature(postPolicy);
-            
-            Map<String, String> respMap = new LinkedHashMap<String, String>();
-            respMap.put("accessid", accessId);
-            respMap.put("policy", encodedPolicy);
-            respMap.put("signature", postSignature);
-            //respMap.put("expire", formatISO8601Date(expiration));
-            respMap.put("dir", dir);
-            respMap.put("host", host);
-            respMap.put("expire", String.valueOf(expireEndTime / 1000));
-            return respMap;
-            
-        } catch (Exception e) {
-            
-            return null;
-        }
-        
-	}
-	
 	@RequestMapping(value = "/sigUploadKey/{type}", method = RequestMethod.GET)
 	public @ResponseBody  Map<String, String> sigUploadKey(HttpServletRequest request,HttpServletResponse response,Locale locale, Model model, @PathVariable int type) {
 		
@@ -397,8 +330,6 @@ public class HomeController extends DcController {
         
         String host = "http://" + bucket + "." + endpoint;
        
-        //String policy = "{\"Version\": \"1\",\"Statement\": [{\"Effect\": \"Allow\",\"Action\": [\"oss:DeleteObject\",\"oss:ListParts\",\"oss:AbortMultipartUpload\","
-        //		+ "\"oss:PutObject\",\"oss:GetObject\"],\"Resource\": [\"acs:oss:*:*:dc-yxyp\",\"acs:oss:*:*:dc-yxyp/*\"]}]}";
         String policy = null;
         try {
         	 long expired = 3600;
