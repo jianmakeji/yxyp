@@ -67,12 +67,7 @@
 	</script>
 
 	<script src="resources/js/lib/jquery-1.10.2.min.js"></script>
-	<!-- <script src="resources/js/lib/jquery.toastmessage.js"></script>
-	<script src="resources/js/lib/jquery.serialize-object.min.js"></script>
-	<script src="resources/js/lib/jquery.validate.min.js"></script> -->
 	<script src="resources/frontend/js/src/config.js"></script>
-<!-- 	<script src="resources/js/src/functions.js"></script>
-	<script src="resources/js/src/ZYFormHandler.js"></script> -->
 	<script src="resources/frontend/js/src/header.js"></script>
 	<script src="resources/frontend/js/src/register.js"></script>
 </body>

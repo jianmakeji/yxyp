@@ -1,0 +1,17 @@
+body{
+}
+.register{
+	width:40%;
+	min-height:600px;
+	margin:50px auto;
+    flex: 1 0 auto;
+}
+
+.zyActiveCode{
+	display: inline-block;
+    vertical-align: middle;
+    height: 32px;
+    width: auto;
+    cursor:pointer;
+    margin-left:40px;
+}

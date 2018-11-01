@@ -6,7 +6,7 @@ var register = new Vue({
 			disableBtn:false,		//获取验证码禁止
 			disableSbt:true,		//提交按钮禁止
 			mobileCodeText:"点击获取验证码",
-			imgSrc:"user/getCode",
+			imgSrc:"user/getCode",	//图片验证码路径
 			formItem: {
 				mobileOrEmail:"1",
 				email: '',			//邮箱
@@ -48,13 +48,17 @@ var register = new Vue({
     	radioChange:function(value){
     		if(value == "0"){				//  email
     			this.showMobileCode = false;
+    			this.disableSbt = false;
+    			this.formItem.mobileCode = "";
     		}else if(value == "1"){			//  mobile
     			this.showMobileCode = true;
+    			this.disableSbt = true;
     		}
     	},
     	//发送手机验证短信
     	sendAcodeStg:function(){
     		var that = this;
+    		this.$Loading.start();
     		if(this.formItem.mobile.length == 11){
     			var url = config.ajaxUrls.sendMobileCode + this.formItem.mobile;
     			$.ajax({
@@ -63,17 +67,21 @@ var register = new Vue({
                     url:url,
                     success:function(res){
                         if(res.success){
+                    		that.$Loading.finish();
                         	that.$Notice.success({title:res.message, duration:3});
                         	clock(that);
                         }else{
+                    		that.$Loading.error();
                         	that.$Notice.error({title:res.message, duration:3});
                         }
                     },
                     error:function(){
+                		that.$Loading.error();
                     	that.$Notice.error({title:config.messages.networkError, duration:3});
                     }
                 })
     		}else if(this.formItem.mobile.length == 0){
+        		that.$Loading.error();
     			that.$Notice.error({title:"请输入手机号", duration:3});
     		}
     	},
@@ -112,7 +120,7 @@ var register = new Vue({
         },
         //提交
         submit:function(name){
-        	console.log("=============",name,this.$refs[name]);
+        	this.$Loading.start();
         	this.$refs[name].validate((valid) => {
                 if (valid) {
                 	var that = this,
@@ -127,20 +135,24 @@ var register = new Vue({
 	                        if(res.success){
 	                            that.$Notice.success({ title: config.messages.optSuccRedirect,duration:3,
 	                            	onClose:function(){
+	                            		that.$Loading.finish();
 	                                	window.location.href=config.viewUrls.login;
 	                                }
 	                            });
 	                        }else{
+	                        	that.$Loading.error();
 	                        	that.$Notice.error({ title: res.message,duration:3});
 	                        }
 	                    },
 	                    error:function(XMLHttpRequest, textStatus, errorThrown){
 	                         if(textStatus == "parsererror"){
+	                        	 that.$Loading.error();
 	                        	 that.$Notice.error({ title: "登陆会话超时，请重新登陆",duration:3});
 	                         }
 	                    }
 	                });
                 } else {
+                	this.$Loading.error();
                     this.$Message.error('请填写相应信息!');
                 }
             })
