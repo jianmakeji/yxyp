@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
 import com.aliyun.oss.OSSClient;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.exceptions.ClientException;
@@ -21,16 +18,13 @@ import com.jianma.yxyp.model.Judge;
 import com.jianma.yxyp.model.Production;
 
 public class AliOssUtil {
-
-	@Autowired
-	@Qualifier(value = "configInfo")
-	private static ConfigInfo configInfo;
 	
     public static final String REGION_CN_HANGZHOU = "cn-hangzhou";
 
     public static final String STS_API_VERSION = "2015-04-01";
    
     public static final ProtocolType STS_PROTOCOL_TYPE = ProtocolType.HTTPS;
+    
     
     public static AssumeRoleResponse assumeRole(String accessKeyId,String accessKeySecret, String roleArn, 
             String roleSessionName) throws ClientException {
@@ -63,12 +57,13 @@ public class AliOssUtil {
         return client.getAcsResponse(request);
     }
     
-    public static Object generatePresignedUrl(int type, Object object){
+    public static Object generatePresignedUrl(ConfigInfo configInfo,int type, Object object){
 		
-		String endpoint = configInfo.endpoint;
-        String accessId = configInfo.accessId;
-        String accessKey = configInfo.accessKey;
-        String bucket = configInfo.bucket;
+    	String endpoint = configInfo.endpoint;
+    	String accessId = configInfo.accessId;
+    	String accessKey = configInfo.accessKey;
+    	String bucket = configInfo.bucket;
+    	    
         String dir = "";
         if (type == 1){
         	dir = "product/";
@@ -107,7 +102,7 @@ public class AliOssUtil {
 		return object;
 	}
     
-    public static List<?> generatePresignedUrl(int type, List<?> fileList){
+    public static List<?> generatePresignedUrl(ConfigInfo configInfo, int type, List<?> fileList){
 		String endpoint = configInfo.endpoint;
         String accessId = configInfo.accessId;
         String accessKey = configInfo.accessKey;
@@ -144,6 +139,7 @@ public class AliOssUtil {
 					sBuilder.append(ossClient.generatePresignedUrl(bucket, dirPath + fileName, expiration).getPath() + ",");
 				});
 				production.setPimage(sBuilder.toString());
+				
 			}
 			else if (object instanceof Judge){
 				Judge judge = (Judge)object;

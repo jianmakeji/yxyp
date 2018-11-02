@@ -17,6 +17,7 @@ import com.jianma.yxyp.model.Production;
 import com.jianma.yxyp.model.ScoreBean;
 import com.jianma.yxyp.service.ProductionService;
 import com.jianma.yxyp.util.AliOssUtil;
+import com.jianma.yxyp.util.ConfigInfo;
 
 @Service
 @Component
@@ -32,6 +33,10 @@ public class ProductionServiceImpl implements ProductionService {
 	@Qualifier(value = "reviewDaoImpl")
 	private ReviewDao reviewDaoImpl;
 	
+	@Autowired
+	@Qualifier(value = "configInfo")
+	private ConfigInfo configInfo;
+	
 	@Override
 	public void createProduction(Production production) {
 		productionDaoImpl.createProduction(production);
@@ -46,13 +51,14 @@ public class ProductionServiceImpl implements ProductionService {
 	public void deleteProduction(int id) {
 		productionDaoImpl.deleteProduction(id);
 	}
+	
 
 	@Override
 	public PagingModel getListProductionByPage(int offset, int limit, int groupNum,int subGroupNum,int round,int status) {
 		List<Production> list = productionDaoImpl.getListProductionByPage(offset, limit, groupNum,subGroupNum,round,status);
 		int count = productionDaoImpl.getCountProduction(groupNum,subGroupNum,round,status);
 		PagingModel pagingModel = new PagingModel();
-		pagingModel.setList(AliOssUtil.generatePresignedUrl(1, list));
+		pagingModel.setList(AliOssUtil.generatePresignedUrl(configInfo, 1, list));
 		pagingModel.setCount(count);
 		return  pagingModel;
 	}
@@ -63,7 +69,7 @@ public class ProductionServiceImpl implements ProductionService {
 		List<Production> list = productionDaoImpl.getListProductionByPageAndUserId(offset, limit, groupNum,subGroupNum,userId);
 		int count = productionDaoImpl.getCountProductionByUserId(groupNum,subGroupNum,userId);
 		PagingModel pagingModel = new PagingModel();
-		pagingModel.setList(AliOssUtil.generatePresignedUrl(1, list));
+		pagingModel.setList(AliOssUtil.generatePresignedUrl(configInfo, 1, list));
 		pagingModel.setCount(count);
 		return  pagingModel;
 	}
@@ -72,7 +78,7 @@ public class ProductionServiceImpl implements ProductionService {
 	public Optional<Production> getProductionDetailById(int id) {
 		Optional<Production> production = productionDaoImpl.getProductionDetailById(id);
 		if (production.isPresent()){
-			return Optional.ofNullable((Production)AliOssUtil.generatePresignedUrl(1, production.get()));
+			return Optional.ofNullable((Production)AliOssUtil.generatePresignedUrl(configInfo, 1, production.get()));
 		}
 		return production;
 	}
@@ -93,7 +99,7 @@ public class ProductionServiceImpl implements ProductionService {
 		List<Production> list = productionDaoImpl.getProductionByCondition(groupNum,subGroupNum, status,userId, round, limit, offset);
 		int count = productionDaoImpl.getProductionCountByCondition(groupNum,subGroupNum, status, userId,round);
 		PagingModel pagingModel = new PagingModel();
-		pagingModel.setList(AliOssUtil.generatePresignedUrl(1, list));
+		pagingModel.setList(AliOssUtil.generatePresignedUrl(configInfo, 1, list));
 		pagingModel.setCount(count);
 		return  pagingModel;
 	}

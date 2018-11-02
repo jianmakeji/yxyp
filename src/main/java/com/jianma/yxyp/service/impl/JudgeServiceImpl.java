@@ -21,6 +21,7 @@ import com.jianma.yxyp.model.User;
 import com.jianma.yxyp.model.UserRole;
 import com.jianma.yxyp.service.JudgeService;
 import com.jianma.yxyp.util.AliOssUtil;
+import com.jianma.yxyp.util.ConfigInfo;
 import com.jianma.yxyp.util.PasswordHelper;
 import com.jianma.yxyp.util.ResponseCodeUtil;
 
@@ -38,6 +39,10 @@ public class JudgeServiceImpl implements JudgeService {
 	@Qualifier(value = "userDaoImpl")
 	private UserDao userDaoImpl;
 
+	@Autowired
+	@Qualifier(value = "configInfo")
+	private ConfigInfo configInfo;
+		
 	@Override
 	public int createJudge(Judge judge) {
 		try {
@@ -79,9 +84,7 @@ public class JudgeServiceImpl implements JudgeService {
 			String judgeEmail = judge.get().getEmail();
 			userDaoImpl.deleteUserByEmail(judgeEmail);
 			judgeDaoImpl.deleteJudge(id);
-			
 		}
-		
 	}
 
 	@Override
@@ -99,21 +102,22 @@ public class JudgeServiceImpl implements JudgeService {
 	public Optional<Judge> findJudgeById(int id) {
 		Optional<Judge> judge = judgeDaoImpl.findJudgeById(id);
 		if (judge.isPresent()){
-			return Optional.ofNullable((Judge)AliOssUtil.generatePresignedUrl(3, judge.get()));
+			return Optional.ofNullable((Judge)AliOssUtil.generatePresignedUrl(configInfo, 3, judge.get()));
 		}
 		return judge;
 	}
 
 	@Override
 	public List<Judge> getAllJudge() {
-		return judgeDaoImpl.getAllJudge();
+		List<Judge> list = judgeDaoImpl.getAllJudge();
+		return (List<Judge>)AliOssUtil.generatePresignedUrl(configInfo, 3, list);
 	}
 
 	@Override
 	public PagingModel findJudgeByPage(int offset, int limit) {
 		
 		PagingModel pagingModel = new PagingModel();
-		pagingModel.setList(judgeDaoImpl.findJudgeByPage(offset, limit));
+		pagingModel.setList(AliOssUtil.generatePresignedUrl(configInfo, 3, judgeDaoImpl.findJudgeByPage(offset, limit)));
 		pagingModel.setCount(judgeDaoImpl.getCountJudge());
 		return pagingModel;
 	}
