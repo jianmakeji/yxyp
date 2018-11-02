@@ -72,7 +72,7 @@ public class ProductionServiceImpl implements ProductionService {
 	public Optional<Production> getProductionDetailById(int id) {
 		Optional<Production> production = productionDaoImpl.getProductionDetailById(id);
 		if (production.isPresent()){
-			return Optional.ofNullable((Production)AliOssUtil.generatePresignedUrl(3, production.get()));
+			return Optional.ofNullable((Production)AliOssUtil.generatePresignedUrl(1, production.get()));
 		}
 		return production;
 	}
