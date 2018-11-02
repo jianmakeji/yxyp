@@ -1,6 +1,6 @@
 'use strict';
 
-var appServer = 'http://localhost:8080/yxyp/sigUploadKey/1';
+var appServer = 'http://localhost:8080/design/sigUploadKey/1';
 var bucket = 'dc-yxyp';
 var region = 'oss-cn-hangzhou';
 

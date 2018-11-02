@@ -16,6 +16,8 @@
 <link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
 <script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
+<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
 <script>
 	var id = "${production.id}";
 </script>
@@ -505,6 +507,16 @@
 									<img v-if="imgUrl_1.length" :src="imgUrl_1" style="width:80px;height:80px;"><br>
 									<input type="file" @change="doUpload_1" ref="inputFile" accept="image/*"/></input>
 									<i-progress :percent="progressPercent_1" />
+								</form-item>
+								<form-item label="图幅二">
+									<img v-if="imgUrl_2.length" :src="imgUrl_2" style="width:80px;height:80px;"><br>
+									<input type="file" @change="doUpload_2" ref="inputFile" accept="image/*"/></input>
+									<i-progress :percent="progressPercent_2" />
+								</form-item>
+								<form-item label="图幅三">
+									<img v-if="imgUrl_3.length" :src="imgUrl_3" style="width:80px;height:80px;"><br>
+									<input type="file" @change="doUpload_3" ref="inputFile" accept="image/*"/></input>
+									<i-progress :percent="progressPercent_3" />
 								</form-item>
 								<form-item>
 									<i-button type="primary" @click="goStep1">上一步</i-button>
