@@ -20,6 +20,7 @@ import com.jianma.yxyp.model.Role;
 import com.jianma.yxyp.model.User;
 import com.jianma.yxyp.model.UserRole;
 import com.jianma.yxyp.service.JudgeService;
+import com.jianma.yxyp.util.AliOssUtil;
 import com.jianma.yxyp.util.PasswordHelper;
 import com.jianma.yxyp.util.ResponseCodeUtil;
 
@@ -96,8 +97,11 @@ public class JudgeServiceImpl implements JudgeService {
 
 	@Override
 	public Optional<Judge> findJudgeById(int id) {
-
-		return judgeDaoImpl.findJudgeById(id);
+		Optional<Judge> judge = judgeDaoImpl.findJudgeById(id);
+		if (judge.isPresent()){
+			return Optional.ofNullable((Judge)AliOssUtil.generatePresignedUrl(3, judge.get()));
+		}
+		return judge;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +57,7 @@ import com.jianma.yxyp.util.ConfigInfo;
 public class HomeController extends DcController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-
+	
 	@Autowired
 	@Qualifier(value = "newsServiceImpl")
 	private NewsService newsServiceImpl;
@@ -72,7 +73,7 @@ public class HomeController extends DcController {
 	@Autowired
 	@Qualifier(value = "configInfo")
 	private ConfigInfo configInfo;
-
+	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -90,7 +91,7 @@ public class HomeController extends DcController {
 			modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
+			throw new ServerException(400, "服务器内部出错了");
 		}
 	}
 
@@ -108,11 +109,6 @@ public class HomeController extends DcController {
 	public String error(HttpServletRequest request, Model model) {
 		return "error";
 	}
-	
-	@RequestMapping(value = "/home")
-	public String home(HttpServletRequest request, Model model) {
-		return "home";
-	}
 
 	@RequestMapping(value = "/index")
 	public ModelAndView index(HttpServletRequest request, Model model) {
@@ -128,7 +124,7 @@ public class HomeController extends DcController {
 			modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
+			throw new ServerException(400, "服务器内部出错了");
 		}
 	}
 
@@ -145,11 +141,11 @@ public class HomeController extends DcController {
 			if (subject.isAuthenticated()) {
 
 				try {
-					subject.checkRole("绠＄悊鍛�");
+					subject.checkRole("管理员");
 					return "redirect:/news/newsMgr";
 				} catch (AuthorizationException e) {
 					try {
-						subject.checkRole("璇勫");
+						subject.checkRole("评委");
 						return "redirect:/review/judgeIndex";
 					} catch (AuthorizationException ex) {
 						return "redirect:/production/works";
@@ -160,31 +156,31 @@ public class HomeController extends DcController {
 				return "/frontend/login";
 			}
 		} catch (IncorrectCredentialsException e) {
-			msg = "鐧诲綍瀵嗙爜閿欒.";
+			msg = "登录密码错误.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (ExcessiveAttemptsException e) {
-			msg = "鐧诲綍澶辫触娆℃暟杩囧";
+			msg = "登录失败次数过多";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (LockedAccountException e) {
-			msg = "甯愬彿宸茶閿佸畾.";
+			msg = "帐号已被锁定.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (DisabledAccountException e) {
-			msg = "甯愬彿宸茶绂佺敤. ";
+			msg = "帐号已被禁用. ";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (ExpiredCredentialsException e) {
-			msg = "甯愬彿宸茶繃鏈�.";
+			msg = "帐号已过期.";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (UnknownAccountException e) {
-			msg = "甯愬彿涓嶅瓨鍦�.鎴栬�呮湭婵�娲�";
+			msg = "帐号不存在.或者未激活";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		} catch (UnauthorizedException e) {
-			msg = "鎮ㄦ病鏈夊緱鍒扮浉搴旂殑鎺堟潈锛�";
+			msg = "您没有得到相应的授权！";
 			model.addAttribute("error", msg);
 			System.out.println(msg);
 		}
@@ -209,8 +205,8 @@ public class HomeController extends DcController {
 
 				try {
 					
-					subject.checkRole("璇勫");
-					System.out.println("璇勫椤甸潰");
+					subject.checkRole("评委");
+					System.out.println("评审页面");
 					return "redirect:/review/judgeIndex/" + round;
 				} catch (AuthorizationException ex) {
 					return "error";
@@ -220,32 +216,32 @@ public class HomeController extends DcController {
 				return "/frontend/login";
 			}
 		} catch (IncorrectCredentialsException e) {
-			msg = "鐧诲綍瀵嗙爜閿欒.";
+			msg = "登录密码错误.";
 			model.addAttribute("error", msg);
 		} catch (ExcessiveAttemptsException e) {
-			msg = "鐧诲綍澶辫触娆℃暟杩囧";
+			msg = "登录失败次数过多";
 			model.addAttribute("error", msg);
 		} catch (LockedAccountException e) {
-			msg = "甯愬彿宸茶閿佸畾.";
+			msg = "帐号已被锁定.";
 			model.addAttribute("error", msg);
 		} catch (DisabledAccountException e) {
-			msg = "甯愬彿宸茶绂佺敤. ";
+			msg = "帐号已被禁用. ";
 			model.addAttribute("error", msg);
 		} catch (ExpiredCredentialsException e) {
-			msg = "甯愬彿宸茶繃鏈�.";
+			msg = "帐号已过期.";
 			model.addAttribute("error", msg);
 		} catch (UnknownAccountException e) {
-			msg = "甯愬彿涓嶅瓨鍦�.鎴栬�呮湭婵�娲�";
+			msg = "帐号不存在.或者未激活";
 			model.addAttribute("error", msg);
 		} catch (UnauthorizedException e) {
-			msg = "鎮ㄦ病鏈夊緱鍒扮浉搴旂殑鎺堟潈锛�";
+			msg = "您没有得到相应的授权！";
 			model.addAttribute("error", msg);
 		} catch (AuthorizationException e) {
-			msg = "璁よ瘉澶辫触锛�";
+			msg = "认证失败！";
 			model.addAttribute("error", msg);
 		}catch(AuthenticationException e){
 			e.printStackTrace();
-			msg = "璁よ瘉澶辫触锛佹垨鑰呰杞鏈粦瀹氳瘎濮旓紒";
+			msg = "认证失败！或者该轮次未绑定评委！";
 			model.addAttribute("error", msg);
 		}
 		return "/frontend/login";
@@ -297,10 +293,9 @@ public class HomeController extends DcController {
 			//modelView.addObject(newsList);
 			return modelView;
 		} catch (Exception e) {
-			throw new ServerException(400, "鏈嶅姟鍣ㄥ唴閮ㄥ嚭閿欎簡");
+			throw new ServerException(400, "服务器内部出错了");
 		}
 	}
-		
 	@RequestMapping(value = "/sigUploadKey/{type}", method = RequestMethod.GET)
 	public @ResponseBody  Map<String, String> sigUploadKey(HttpServletRequest request,HttpServletResponse response,Locale locale, Model model, @PathVariable int type) {
 		
@@ -329,27 +324,27 @@ public class HomeController extends DcController {
         }
         
         String host = "http://" + bucket + "." + endpoint;
-       
-        String policy = null;
+        String policy = null;  
+        Map<String, String> respMap = new HashMap<String, String>();
         try {
-        	 long expired = 3600;
+        	long expired = 3600;
         	AssumeRoleResponse assumeResponse = AliOssUtil.assumeRole(accessId,accessKey, roleArn, 
                     roleSessionName, policy, expired, ProtocolType.HTTPS);
             Credentials credentials = assumeResponse.getCredentials();
            
-            Map<String, String> respMap = new LinkedHashMap<String, String>();
             respMap.put("accessKeyId", credentials.getAccessKeyId());
             respMap.put("accessKeySecret", credentials.getAccessKeySecret());
             respMap.put("securityToken", credentials.getSecurityToken());
             respMap.put("dir", dir);
             respMap.put("host", host);
-            return respMap;
+            respMap.put("success", "true");
+
         } catch (ClientException e) {
         	e.printStackTrace();
+        	respMap.put("success", "false");
     	}
         
-        
-        return null;
+        return respMap;
 	}
 	
 }
