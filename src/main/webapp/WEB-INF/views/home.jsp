@@ -16,6 +16,7 @@
     </div>
     <table>
       <tr>
+      
         <td>
           <div class="panel panel-primary">
             <div class="panel-heading">Upload file</div>
@@ -47,6 +48,9 @@
             </div>
           </div>
         </td>
+        
+        
+        
         <td>
           <div class="panel panel-success">
             <div class="panel-heading">Upload content</div>

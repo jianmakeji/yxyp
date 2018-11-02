@@ -319,6 +319,16 @@ $(document).ready(function () {
     });
 
 });*/
+'use strict';
+
+var appServer = 'http://localhost:8080/design/sigUploadKey/1';
+var bucket = 'dc-yxyp';
+var region = 'oss-cn-hangzhou';
+
+var urllib = OSS.urllib;
+var Buffer = OSS.Buffer;
+var OSS = OSS.Wrapper;
+var STS = OSS.STS;
 
 var uploadWork = new Vue({
 	el:".uploadWork",
@@ -346,12 +356,16 @@ var uploadWork = new Vue({
 				groupNum:"1",				//组别
 				subGroupNum:"1"				//作品类型
 			},
+			
+			fileName_1:"",	//上传文件名称参数（测试）
 			imgUrl_1:"",
 			progressPercent_1:0,	
-//			imgUrl_2:"",
-//			progressPercent_2:0,
-//			imgUrl_3:"",
-//			progressPercent_3:0,		
+			fileName_2:"",	//上传文件名称参数（测试）
+			imgUrl_2:"",
+			progressPercent_2:0,
+			fileName_3:"",	//上传文件名称参数（测试）
+			imgUrl_3:"",
+			progressPercent_3:0	
 		}
 	},
 	methods:{
@@ -385,14 +399,91 @@ var uploadWork = new Vue({
         	console.log(this.formItem);
         },
         //上传第一件作品
-        doUpload_1:function(){
-        	
+        doUpload_1:function(files){
+        	var that = this;
+        	urllib.request(appServer, {
+          		method: 'GET'
+        	}).then(function (result) {
+        	  	var creds = JSON.parse(result.data);
+        		console.log(creds);
+            	var client = new OSS({
+            		region: region,
+              		accessKeyId: creds.accessKeyId,
+              		accessKeySecret: creds.accessKeySecret,
+              		stsToken: creds.securityToken,
+              		bucket: bucket
+            	});
+            	var file = files.target.files[0];;
+            	var key = that.fileName;
+            	client.multipartUpload('product/'+key, file,{
+            		progress: progress
+            	}).then(function (res) {
+            		var res = client.signatureUrl('product/' + key);
+            		that.imgUrl_1 = res;
+            		console.log("res",res);
+            		console.log(res.replace(globel_.aliHttp + "courseImages/",'').split('?')[0];)
+            	});
+          	});
+        },
+        doUpload_2:function(files){
+        	var that = this;
+        	urllib.request(appServer, {
+          		method: 'GET'
+        	}).then(function (result) {
+        	  	var creds = JSON.parse(result.data);
+        		console.log(creds);
+            	var client = new OSS({
+            		region: region,
+              		accessKeyId: creds.accessKeyId,
+              		accessKeySecret: creds.accessKeySecret,
+              		stsToken: creds.securityToken,
+              		bucket: bucket
+            	});
+            	var file = files.target.files[0];;
+            	var key = that.fileName;
+            	client.multipartUpload('product/'+key, file,{
+            		progress: progress
+            	}).then(function (res) {
+            		var res = client.signatureUrl('product/' + key);
+            		that.imgUrl_2 = res;
+            	});
+          	});
+        },
+        doUpload_3:function(files){
+        	var that = this;
+        	urllib.request(appServer, {
+          		method: 'GET'
+        	}).then(function (result) {
+        	  	var creds = JSON.parse(result.data);
+        		console.log(creds);
+            	var client = new OSS({
+            		region: region,
+              		accessKeyId: creds.accessKeyId,
+              		accessKeySecret: creds.accessKeySecret,
+              		stsToken: creds.securityToken,
+              		bucket: bucket
+            	});
+            	var file = files.target.files[0];;
+            	var key = that.fileName;
+            	client.multipartUpload('product/'+key, file,{
+            		progress: progress
+            	}).then(function (res) {
+            		var res = client.signatureUrl('product/' + key);
+            		that.imgUrl_3 = res;
+            	});
+          	});
         },
         submit:function(){
-        	
+        	console.log("submit");
         }
 	}
 })
+var progress = function (p) {
+	return function (done) {
+		uploadWork.progressPercent_1 = p * 100;
+		done();
+	}
+};
 
 
 
