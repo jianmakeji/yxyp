@@ -101,23 +101,21 @@ public class JudgeServiceImpl implements JudgeService {
 	@Override
 	public Optional<Judge> findJudgeById(int id) {
 		Optional<Judge> judge = judgeDaoImpl.findJudgeById(id);
-		if (judge.isPresent()){
-			return Optional.ofNullable((Judge)AliOssUtil.generatePresignedUrl(configInfo, 3, judge.get()));
-		}
+		
 		return judge;
 	}
 
 	@Override
 	public List<Judge> getAllJudge() {
 		List<Judge> list = judgeDaoImpl.getAllJudge();
-		return (List<Judge>)AliOssUtil.generatePresignedUrl(configInfo, 3, list);
+		return list;
 	}
 
 	@Override
 	public PagingModel findJudgeByPage(int offset, int limit) {
 		
 		PagingModel pagingModel = new PagingModel();
-		pagingModel.setList(AliOssUtil.generatePresignedUrl(configInfo, 3, judgeDaoImpl.findJudgeByPage(offset, limit)));
+		pagingModel.setList(judgeDaoImpl.findJudgeByPage(offset, limit));
 		pagingModel.setCount(judgeDaoImpl.getCountJudge());
 		return pagingModel;
 	}

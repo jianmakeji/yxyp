@@ -89,6 +89,7 @@ public class ProductionDaoImpl implements ProductionDao {
 
 		query.setFirstResult(offset);
 		query.setMaxResults(limit);
+				
 		return query.list();
 	}
 

@@ -89,11 +89,11 @@ public class AliOssUtil {
 		if (object instanceof Production){
 			Production production = (Production)object;
 			
-			production.setPimage(ossClient.generatePresignedUrl(bucket, dirPath + production.getPimage(), expiration).getPath());
+			production.setPimage(ossClient.generatePresignedUrl(bucket, dirPath + production.getPimage(), expiration).toString());
 		}
 		else if (object instanceof Judge){
 			Judge judge = (Judge)object;
-			judge.setHeadicon(ossClient.generatePresignedUrl(bucket, dirPath + judge.getHeadicon(), expiration).getPath());
+			judge.setHeadicon(ossClient.generatePresignedUrl(bucket, dirPath + judge.getHeadicon(), expiration).toString());
 		}
 		
 		// 关闭OSSClient。
@@ -130,14 +130,16 @@ public class AliOssUtil {
 		Date expiration = new Date(new Date().getTime() + 900 * 1000);
 		// 生成以GET方法访问的签名URL，访客可以直接通过浏览器访问相关内容。
 		final String dirPath = dir;
+		
 		fileList.forEach((object) -> {
 			if (object instanceof Production){
 				Production production = (Production)object;
 				String[] imageArray = production.getPimage().split("\\,");
 				StringBuilder sBuilder = new StringBuilder();
 				Arrays.stream(imageArray).collect(Collectors.toList()).stream().forEach((fileName)->{
-					sBuilder.append(ossClient.generatePresignedUrl(bucket, dirPath + fileName, expiration).getPath() + ",");
+					sBuilder.append(ossClient.generatePresignedUrl(bucket, dirPath + fileName+ "?x-oss-process=style/thumb-200-200", expiration).toString() + ",");
 				});
+				
 				production.setPimage(sBuilder.toString());
 				
 			}
