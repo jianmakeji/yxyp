@@ -1,3 +1,14 @@
+'use strict';
+
+var appServer = 'http://localhost:8080/design/sigUploadKey/1';
+var bucket = 'dc-yxyp';
+var region = 'oss-cn-hangzhou';
+
+var urllib = OSS.urllib;
+var Buffer = OSS.Buffer;
+var OSS = OSS.Wrapper;
+var STS = OSS.STS;
+
 var Component = new Vue({
 	el:".judgeMgr",
 	data :function() {
@@ -11,7 +22,7 @@ var Component = new Vue({
                     	   	domProps: {
                                    type: 'primary',
                                    size: 'small',
-                                   src: params.row.headicon
+                                   src: params.row.headicon	
                                },
                                style: {
                                    width: '80px',
@@ -57,7 +68,8 @@ var Component = new Vue({
            totalPage:"",
            deleteModal:false,
            index:"",
-           judgeTitle:""
+           judgeTitle:"",
+           judgeHeadIconArr:[]
         }
     },
     created:function(){
@@ -73,6 +85,20 @@ var Component = new Vue({
                 }else{
                 	that.dataList = response.aaData;
                 	that.totalPage = response.iTotalRecords;
+                	
+                	//对图片进行签名获取
+	        		urllib.request(appServer, {
+	              		method: 'GET'
+	            	}).then(function (result) {
+	            	  	var creds = JSON.parse(result.data);
+	            	  	if(creds.success == "true"){
+	            	  		var client = initClient(creds);
+	            	  		for(var i=0;i<that.dataList.length;i++){
+	            	  			that.dataList[i].headicon = client.signatureUrl("judges/"+that.dataList[i].headicon, {expires: 3600,process : 'style/thumb-200-200'});
+	            	  		}
+	            	  	}
+	              	});
+                	
                 }
             }
         });	 
@@ -140,3 +166,13 @@ var Component = new Vue({
     }
 })
 
+function initClient(creds){
+	var client = new OSS({
+		region: region,
+  		accessKeyId: creds.accessKeyId,
+  		accessKeySecret: creds.accessKeySecret,
+  		stsToken: creds.securityToken,
+  		bucket: bucket
+	});
+	return client;
+}

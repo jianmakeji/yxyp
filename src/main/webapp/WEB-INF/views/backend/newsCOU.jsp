@@ -12,6 +12,8 @@
 <link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
 <script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
+<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
 <script>
 	var id = "${news.id}";
 </script>
@@ -29,23 +31,12 @@
 		<article class="newsCOU" v-cloak>
 			<i-col span="24">新建/修改新闻</i-col>	<br/><br/>
 			<div>
-			    <i-form :model="dataSourse" :rules="ruleDataSourse" :label-width="180" style="width:80%;" id="myForm">
+			    <i-form :model="dataSourse" :rules="ruleDataSourse" :label-width="180" style="width:80%;" id="myForm">   
 			        <form-item label="封面图*">
-		                <upload ref="upload" :action="host" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" 
-		                	:data="{
-		                  		'key': g_object_name,
-		                  		'policy': policyBase64,
-		                  		'OSSAccessKeyId': accessid,
-		                  		'success_action_status': '200',
-		                  		'callback': callbackbody,
-		                  		'signature': signature,
-		                  	}" :show-upload-list="false">
-		                    <div style="width:100px;height:auto">
-		                        <img :src="dataSourse.thumb" style="width: 100%" name="thumb">
-		                    </div>
-		                </upload>
-			        </form-item>
-			        
+						<img v-show="imgUrl.length" :src="imgUrl" style="width:120px;height:120px;"><br>
+						<input type="file" @change="doUpload" ref="inputFile" accept="image/*"/></input>
+						<i-progress :percent="progressPercent" />
+					</form-item>
 			        <form-item label="标题*" prop="title">
 			            <i-input v-model="dataSourse.title" placeholder="请输入标题..." name="title">{{dataSourse.title}}</i-input>
 			        </form-item>

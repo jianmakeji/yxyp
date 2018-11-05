@@ -30,7 +30,7 @@
 	
 	<div class="uploadWork" v-cloak> 
 		<div v-show="step != '3'">
-			<row type="flex" justify="center" align="top" :gutter="60">
+			<row type="flex" justify="center" align="top" >
 		        <i-col class="rules" span="8">
 		        	<h2 class="uploadRuleTitle">上传作品</h2>
 		        	<div class="uploadRule_1" v-show="step === '1'">
@@ -134,19 +134,26 @@
 								    </radio-group>
 								</form-item>
 								<form-item label="图幅一" prop="fileName_1">
-									<img v-show="imgUrl_1.length" :src="imgUrl_1" style="width:80px;height:80px;"><br>
+									<img v-show="imgUrl_1.length" :src="imgUrl_1" style="width:120px;height:120px;"><br>
 									<input type="file" @change="doUpload_1" ref="inputFile" accept="image/*"/></input>
 									<i-progress :percent="progressPercent_1" />
 								</form-item>
 								<form-item label="图幅二">
-									<img v-show="imgUrl_2.length" :src="imgUrl_2" style="width:80px;height:80px;"><br>
+									<img v-show="imgUrl_2.length" :src="imgUrl_2" style="width:120px;height:120px;"><br>
 									<input type="file" @change="doUpload_2" ref="inputFile" accept="image/*"/></input>
 									<i-progress :percent="progressPercent_2" />
 								</form-item>
 								<form-item label="图幅三">
-									<img v-show="imgUrl_3.length" :src="imgUrl_3" style="width:80px;height:80px;"><br>
+									<img v-show="imgUrl_3.length" :src="imgUrl_3" style="width:120px;height:120px;"><br>
 									<input type="file" @change="doUpload_3" ref="inputFile" accept="image/*"/></input>
 									<i-progress :percent="progressPercent_3" />
+								</form-item>
+								<form-item label="附件">
+				           			<label>请上传zip、rar格式压缩文件</label><br/>
+									<i-button type="primary" id="browse">选择文件</i-button>
+				           			<i-button type="primary" id="upload-btn">开始上传</i-button><br/>
+				           			<label id="zyFormAttachTitle"></label>
+				           			<i-progress :percent="attachFilePercent" />
 								</form-item>
 								<form-item>
 									<i-button type="primary" @click="goStep1">上一步</i-button>
@@ -160,15 +167,15 @@
 				</i-col>
 		    </row>
 		</div>
-		<div v-show="step === '3'">
+		<div v-show="step === '3'" style="padding-bottom: 20px;">
 			<row type="flex" justify="center" align="top">
 		        <i-col class="preview" span="20">
 		        	<h1>标题：{{formItem.title}}</h1>
 		        	<h2>作者：{{formItem.participant_name}}</h2>
 		        	<p>简介：{{formItem.content}}</p>
-		        	<img v-show="imgUrl_1" :src="imgUrl_1" style="width:80px;height:80px;"><br>
-		        	<img v-show="imgUrl_2" :src="imgUrl_2" style="width:80px;height:80px;"><br>
-		        	<img v-show="imgUrl_3" :src="imgUrl_3" style="width:80px;height:80px;"><br>
+		        	<img v-show="imgUrl_1" :src="imgUrl_1" style="width:60%;height:auto;margin:5px auto;"><br>
+		        	<img v-show="imgUrl_2" :src="imgUrl_2" style="width:60%;height:auto;margin:5px auto;"><br>
+		        	<img v-show="imgUrl_3" :src="imgUrl_3" style="width:60%;height:auto;margin:5px auto;"><br>
 		        	<i-button type="primary" @click="goStep2">上一步</i-button>
 					<i-button type="primary" @click="submit">提交</i-button>
 		        </i-col>
@@ -182,15 +189,12 @@
 	</script>
 
 	<script src="resources/js/lib/jquery-1.10.2.min.js"></script>
-	<!-- <script src="resources/js/lib/jquery.toastmessage.js"></script>
+	
 	<script src="resources/js/lib/plupload.full.min.js"></script>
 	<script src="resources/frontend/js/lib/plupLoad.js"></script>
-	<script src="resources/js/lib/juicer-min.js"></script> -->
+	<script src="resources/js/lib/juicer-min.js"></script>
 	<script src="resources/frontend/js/src/config.js"></script>
-	<!-- <script src="resources/js/src/functions.js"></script>
-	<script src="resources/js/src/ZYFormHandler.js"></script>
-	<script src="resources/js/src/ZYCOUHandler.js"></script>
-	<script src="resources/frontend/js/src/ossupload.js"></script> -->
+	<script src="resources/frontend/js/src/ossupload.js"></script>
 	<script src="resources/frontend/js/src/uploadWork.js"></script>
 	<script src="resources/frontend/js/src/header.js"></script>
 </body>

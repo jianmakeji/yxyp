@@ -14,6 +14,8 @@
 <link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
 <script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
+<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
 </head>
 <body>
 

@@ -7,35 +7,34 @@
 <html>
 <head>
 <%@ include file="../head.jsp"%>
-<link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
-<link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
+<!-- <link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet"> -->
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/workDetail.css" type="text/css" rel="stylesheet">
+
+<!-- vue和iview引用文件 -->
+<link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
+<script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
+<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
 <script>
 	var productionId = '${production.id}';
 </script>
 </head>
-<body>
+<body  style="max-width:none;">
 	<%@ include file="header.jsp"%>
 
-	<div class="zyWorkDetail zyMargin150" id="zyWorkDetail">
-		<h3 class="zyTitle"><spring:message code="title"/>：${production.title}</h3>
-		
-		<p class="zyText"><spring:message code="introduction"/>：${production.content}</p>
-		
-		<c:if test="${!empty production.attachFile}">
-			<div class="zy20C7BE">
-				附件下载:&nbsp;&nbsp;<a class="zy20C7BE" href="file/downloadFile?filePath=${production.attachFile}" target="_blank">${production.attachFile}</a>
-			</div>
-			<br>
-		</c:if>
-		<%-- <c:if test="${!empty production.pimage}">
-			<div class="zy20C7BE">
-				<img src="${production.pimage}" style="margin:10px auto;">
-			</div>
-			<br>
-		</c:if> --%>
-
-		
+	<div class="workDetail" v-cloak>
+		<h2 class="title">标题：{{title}}</h2>
+		<p class="content">简介：{{content}}</p>
+		<div class="attachFile" v-show="attachFile">
+			附件下载:&nbsp;&nbsp;<a :href="attachFileDownload" target="_blank">{{attachFile}}</a>
+		</div>
+		<div class="produceImg">
+			<img :src="productImg_1" />
+			<img :src="productImg_2" />
+			<img :src="productImg_3" />
+		</div>
 	</div>
 
 	<script>

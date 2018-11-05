@@ -1,50 +1,24 @@
-//图片上传
-var g_object_name = "";
-var key = '';
-var hostPrefix = "http://dc-yl.oss-cn-hangzhou.aliyuncs.com/";
-var uploadImage = "resources/backend/images/app/defaultPeopleImage.jpg";
-function random_string(len) {
-    var len = len || 32;
-    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
-    var maxPos = chars.length;
-    var pwd = '';
-    for (var i = 0; i < len; i++) {
-        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
-    }
-    return pwd;
-}
-function get_suffix(filename) {
-    var pos = filename.lastIndexOf('.')
-    var suffix = ''
-    if (pos != -1) {
-        suffix = filename.substring(pos)
-    }
-    return suffix;
-}
-function calculate_object_name(filename) {
+'use strict';
 
-    var suffix = get_suffix(filename)
-    g_object_name = key + random_string(10) + suffix
+var appServer = 'http://localhost:8080/design/sigUploadKey/1';
+var bucket = 'dc-yxyp';
+var region = 'oss-cn-hangzhou';
 
-}
-function get_uploaded_object_name(filename) {
-    return g_object_name;
-}
+var urllib = OSS.urllib;
+var Buffer = OSS.Buffer;
+var OSS = OSS.Wrapper;
+var STS = OSS.STS;
 
-
-var Component = new Vue({
+var judgeCOU = new Vue({
 	el:".judgeCOU",
 	data:{
 //      图片上传
-        g_object_name: '',
-        policyBase64: '',
-        accessid: '',
-        callbackbody: '',
-        signature: '',
-        host: hostPrefix,
+		imgUrl:"",
+        fileName:"",
+        progressPercent:0,
 //      需要的数据
         dataSourse:{
-        	headicon: uploadImage,
+        	headicon: "",
         	id:"",
         	name:"",
         	email:"",
@@ -72,7 +46,23 @@ var Component = new Vue({
                 data:{id:that.dataSourse.id},
                 success:function(response){
                     if(response.success){
-                    	that.dataSourse.headicon = response.object.headicon;
+
+                    	
+                    	//对图片进行签名获取
+    	        		urllib.request(appServer, {
+    	              		method: 'GET'
+    	            	}).then(function (result) {
+    	            	  	var creds = JSON.parse(result.data);
+    	            	  	if(creds.success == "true"){
+    	            	  		
+    	            	  		var client = initClient(creds);
+    	            	  		that.imgUrl = client.signatureUrl("judges/"+response.object.headicon, {expires: 3600,process : 'style/thumb-200-200'});
+    	            	  		that.fileName = response.object.headicon;
+    	            	  		that.progressPercent = 100;
+    	            	  	}
+    	              	});
+                    	
+                    	
                     	that.dataSourse.name = response.object.name;
                     	that.dataSourse.email = response.object.email;
                     	that.dataSourse.password = response.object.password;
@@ -112,45 +102,23 @@ var Component = new Vue({
         });
     },
     methods:{
-//      **********************	图片上传		*******************************
-    	handleSuccess: function(res, file, fileList) {
-            this.dataSourse.headicon = hostPrefix + g_object_name + "?x-oss-process=style/thumb-300";
-        },
-        handleFormatError: function(file) {
-            this.$Notice.error({title:"文件格式错误！"});
-        },
-        handleMaxSize: function(file) {
-            this.$Notice.error({title:"文件不能超过2M！"});
-        },
-        handleBeforeUpload: function(file) {
-            var message = this.$Message;
-            var that = this;
-            
-            $.ajax({
-                type: 'GET',
-                url: 'uploadKey/3',
-                async: false,
-                dataType: 'json',
-                success: function(result) {
-                	that.$refs.upload.data.host = result.host;
-                	that.$refs.upload.data.policy = result.policy;
-                	that.$refs.upload.data.OSSAccessKeyId = result.accessid;
-                	that.$refs.upload.data.signature = result.signature;
-                	that.$refs.upload.data.callback = '';
-                    key = result.dir;
-                    g_object_name = result.dir;
-                    calculate_object_name(file.name)
-                    that.$refs.upload.data.key = g_object_name;
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    message.error(errorThrown);
-                }
-            });
-        },
-//      **********************	提交		*******************************   
+    	doUpload:function(files){
+    		var that = this;
+        	urllib.request(appServer, {
+          		method: 'GET'
+        	}).then(function (result) {
+        	  	var creds = JSON.parse(result.data);
+        	  	if(creds.success == "true"){
+        	  		var client = initClient(creds);
+        	  		multipartUpload(client, files, that, progress);
+        	  	}
+          	});
+    	}, 
     	submit: function(){
     		var img = new Image();
-    		img.src = this.dataSourse.headicon;
+    		img.src = this.imgUrl;
+    		this.dataSourse.headicon = this.fileName;
+    		console.log(this.dataSourse);
     		if(img.width  == img.height){
     			this.dataSourse.description = tinyMCE.editors[0].getContent();
         		var that = this;
@@ -184,3 +152,33 @@ var Component = new Vue({
     	}
     }
 })
+
+
+function initClient(creds){
+	var client = new OSS({
+		region: region,
+  		accessKeyId: creds.accessKeyId,
+  		accessKeySecret: creds.accessKeySecret,
+  		stsToken: creds.securityToken,
+  		bucket: bucket
+	});
+	return client;
+}
+
+function multipartUpload(client, files, that, progress){
+	var file = files.target.files[0];
+	var fileName = files.target.files[0].name;
+	client.multipartUpload('judges/'+ fileName, file,{
+		progress: progress
+	}).then(function (res) {
+		var res = client.signatureUrl('judges/' + fileName);
+		that.imgUrl = res;
+		that.fileName = fileName;
+	});
+}
+var progress = function (p) {
+	return function (done) {
+		judgeCOU.progressPercent = p * 100;
+		done();
+	}
+};

@@ -35,12 +35,12 @@ var uploadWork = new Vue({
 				groupNum:"1",				//组别
 				subGroupNum:"1",			//作品类型
 				pimage:"",					//作品图片(多作品用逗号连接)
-				status:"1"
+				status:"1",
+				attachFile:""
 			},
 			ruleformItem:{
 				participantName:[
-	                 {required: true, message: '请输入参赛人或单位', trigger: 'blur'},
-	              	 {max:6, message: '密码至少为6位', trigger: 'blur'}
+	                 {required: true, message: '请输入参赛人或单位', trigger: 'blur'}
 	            ],
 				participantIdNumber:[{ required: true, message: '此项不能为空', trigger: 'blur' }],
 				participantBrief:[{ required: true, message: '此项不能为空', trigger: 'blur' }],
@@ -59,6 +59,8 @@ var uploadWork = new Vue({
 			fileName_3:"",	//上传文件名称参数（测试）
 			imgUrl_3:"",
 			progressPercent_3:0,
+			
+			attachFilePercent:0,
 			
 			submitUrl:config.ajaxUrls.workCreate,
 			redirectUrl: config.viewUrls.works
@@ -109,7 +111,7 @@ var uploadWork = new Vue({
         	  	var creds = JSON.parse(result.data);
         	  	if(creds.success == "true"){
         	  		var client = initClient(creds);
-        	  		multipartUpload(client, files, that, progress1);
+        	  		multipartUpload(client, files, that, progress1, 'p1');
         	  	}
           	});
         },
@@ -123,7 +125,7 @@ var uploadWork = new Vue({
             	  	if(creds.success == "true"){
             	  		var client = initClient(creds); 
             	  		
-            	  		multipartUpload(client, files, that, progress2);
+            	  		multipartUpload(client, files, that, progress2, 'p2');
             	  	}
               	});
         	}else{
@@ -139,7 +141,7 @@ var uploadWork = new Vue({
             	  	var creds = JSON.parse(result.data);
             	  	if(creds.success == "true"){
             	  		var client = initClient(creds);
-            	  		multipartUpload(client, files, that, progress3);
+            	  		multipartUpload(client, files, that, progress3, 'p3');
             	  	}
               	});
         	}else{
@@ -150,6 +152,7 @@ var uploadWork = new Vue({
         	var that = this;
         	pimageConcat(this);
     		this.$Loading.start();
+    		console.log(this.formItem);
         	$.ajax({
                 url:this.submitUrl,
                 type:"POST",
@@ -182,19 +185,20 @@ var uploadWork = new Vue({
 	},
 	created:function(){
 		var that = this;
-
-		console.log("----id----",id);
 	    if (id) {
 	        this.submitUrl = config.ajaxUrls.workUpdate;
 	        $.ajax({
 	        	url:config.ajaxUrls.workDetail.replace(":id", id),
 	        	type:"GET",
 	        	success:function(res){
-	        		console.log("--------",res);
 	        		that.formItem = res.object;
 	        		that.formItem.participantType = res.object.participantType.toString();
 	        		that.formItem.groupNum = res.object.groupNum.toString();
 	        		that.formItem.subGroupNum = res.object.subGroupNum.toString();
+	        		if(res.object.attachFile){
+	        			that.attachFilePercent = 100;
+	        		}
+	        		
 	        		var pimageArr = res.object.pimage.split(",");
 	        		//对图片进行签名获取
 	        		urllib.request(appServer, {
@@ -212,6 +216,48 @@ var uploadWork = new Vue({
 	    }
 	}
 })
+var attachUrl = "";
+$(document).ready(function(){
+	var uploader = new plupload.Uploader({
+        browse_button : 'browse', //触发文件选择对话框的按钮，为那个元素id
+        url : config.ajaxUrls.attachUpload, //服务器端的上传页面地址
+        multi_selection:false,
+        filters:{
+        	mime_types : [{ title : "Zip files", extensions : "zip,rar" }],
+        	max_file_size : '100mb',
+        	prevent_duplicates : true
+        },
+        multipart_params:{	//上传的参数
+        	fileType:1,
+        	file:[]
+        }
+    });    
+
+    uploader.init();
+
+    uploader.bind('FilesAdded',function(uploader,files){
+    	uploadWork.$Notice.success({title:"已添加文件，确认无误请上传"});
+    });
+    
+    uploader.bind('UploadProgress',function(uploader,file){
+    	uploadWork.attachFilePercent = file.percent;
+    })
+    
+    uploader.bind('FileUploaded',function(up, file, info){
+    	uploadWork.$Notice.success({title:config.messages.uploaded});
+    	$("#zyFormAttachTitle").html(file.name);
+    	uploadWork.formItem.attachFile = JSON.parse(info.response).object;
+    });
+    
+    uploader.bind('Error',function(uploader,file){
+    	uploadWork.$Notice.error({title:config.messages.uploadIOError});
+    });
+    //最后给"开始上传"按钮注册事件
+    document.getElementById('upload-btn').onclick = function(){
+        uploader.start(); 
+    }
+})
+
 
 function initClient(creds){
 	var client = new OSS({
@@ -240,15 +286,23 @@ function initProductImg(client,pimageArr,that){
 			that.progressPercent_3 = 100;
 		}
 }
-function multipartUpload(client, files, that, progress){
+function multipartUpload(client, files, that, progress, p){
 	var file = files.target.files[0];
 	var fileName = files.target.files[0].name;
 	client.multipartUpload('product/'+ fileName, file,{
 		progress: progress
 	}).then(function (res) {
 		var res = client.signatureUrl('product/' + fileName);
-		that.imgUrl_1 = res;
-		that.fileName_1 = fileName;
+		if(p == 'p1'){
+			that.imgUrl_1 = res;
+			that.fileName_1 = fileName;
+		}else if(p =='p2'){
+			that.imgUrl_2 = res;
+			that.fileName_2 = fileName;
+		}else if(p =='p3'){
+			that.imgUrl_3 = res;
+			that.fileName_3 = fileName;
+		}
 	});
 }
 var progress1 = function (p) {

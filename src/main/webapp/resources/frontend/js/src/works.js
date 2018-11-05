@@ -1,122 +1,164 @@
-var works = (function (config, functions) {
-    return {
-        remove: function (el) {
-            functions.showLoading();
-            var me = this;
-            $.ajax({
-                url: config.ajaxUrls.workRemove.replace(":id", el.attr("href")),
-                type: "get",
-                dataType: "json",
-                success: function (response) {
-                    if (response.success) {
-                        $().toastmessage("showSuccessToast", config.messages.optSuccess);
-                        el.parents("tr").remove();
-                        functions.hideLoading();
-                    } else {
-                        functions.ajaxReturnErrorHandler(response.message);
-                    }
+var works = new Vue({
+	el:".works",
+	data:function(){
+		return{
+			index:"",			//作品序列
+			deleteModal:false,	//弹出层标识
+			productTitle:"",	//作品标题
+			total:0,
+			columns: [
+			    {title:"ID",key:"id",align: 'center'},
+			    {title:"标题",key:"title",align: 'center'},
+			    {title:"简介",key:"content",align: 'center'},
+			    {title:"状态",key:"status",align: 'center',
+			    	render: (h, params) => {
+	                       return h('div', [
+	                           h('p', config.workStatus[params.row.status])
+	                       ]);
+	                   }
+			    },
+			    {title:"操作",key:"opt",align: 'center',
 
-                },
-                error: function () {
-                    functions.ajaxErrorHandler();
-                }
-            });
-        },
-        loadData: function (start, callback) {
-            $.ajax({
-                url: config.ajaxUrls.worksGetByPage,
-                type: "get",
-                data: {
-                    groupNum: 0,
-                    subGroupNum: 0,
-                    status: 0,
-                    userId: 0,
-                    round:0,
-                    iDisplayStart: start,
-                    iDisplayLength: 10,
-                    sEcho: "zy"
-                },
-                success: function (response) {
-                    if (response.success) {
-                        var results = response.aaData,
-                            totalCount = response.iTotalRecords, trTpl;
-                        for (var i = 0, len = results.length; i < len; i++) {
-                            results[i].canEdit = true;
-                            if (results[i].status > 1) {
-                                results[i].canEdit = false;
-                            }
-                            results[i].status = config.workStatus[results[i].status];
-                            if (results[i].content.length > 50){
-                            	results[i].content = results[i].content.substr(0,50) +'......';
-                            }
-                             
-                        }
-
-                        trTpl = $("#zyTrTpl").html();
-                        $("#myTable tbody").html(juicer(trTpl, {
-                            items: results
-                        }));
-
-                        if (callback) {
-                            callback(totalCount);
-                        }
-
-                        functions.hideLoading();
-                    } else {
-                        functions.ajaxReturnErrorHandler(response.message);
-                    }
-                },
-                error: function () {
-                    functions.ajaxErrorHandler();
-                }
-            })
-        }
-    }
-    
-    
-})(config, functions);
-
-$(document).ready(function () {
-    //重新定义juicer的取变量标签，因为和jstl的重复了
-    juicer.set({
-        'tag::interpolateOpen': '$ZY{'
-    });
-
-    works.loadData(0, function (totalCount) {
-    	var totalPage;
-		if(totalCount % 10 > 0){
-			totalPage = parseInt(totalCount / 10) + 1;
-		}else if(totalCount % 10 == 0){
-			totalPage = totalCount / 10;
-		}
-        var totalRecords = totalCount;
-        var pageNo = 1;
-        kkpager.generPageHtml({
-            pno: pageNo,
-            isGoPage: false,
-            isShowTotalPage: false,
-            isShowCurrPage: false,
-            mode: 'click', //设置为click模式
-            //总页码
-            total: totalPage,
-            //总数据条数
-            totalRecords: totalRecords,
-            //点击页码、页码输入框跳转、以及首页、下一页等按钮都会调用click
-            //适用于不刷新页面，比如ajax
-            click: function (n) {
-                //这里可以做自已的处理
-                //...
-                //处理完后可以手动条用selectPage进行页码选中切换
-                this.selectPage(n);
-                works.loadData((n - 1) * 10);
+			    	 render: (h, params) => {
+				    	if(params.row.status == 1){
+				    		return h('div', [
+	                           h('Button', {
+	                               props: { type: 'primary', size: 'small' },
+	                               style: { marginRight: '5px' },
+	                               on: {
+	                                   click: () => {
+	                                       this.check(params.index)
+	                                   }
+	                               }
+	                           }, '查看'),
+	                           h('Button', {
+	                               props: { type: 'primary', size: 'small' },
+	                               style: { marginRight: '5px' },
+	                               on: {
+	                                   click: () => {
+	                                       this.change(params.index)
+	                                   }
+	                               }
+	                           }, '修改'),
+	                           h('Button', {
+	                               props: { type: 'error', size: 'small' },
+	                               on: {
+	                                   click: () => {
+	                                       this.remove(params.index)
+	                                   }
+	                               }
+	                           }, '删除')
+	                       ]);
+				    	}else{
+				    		return h('div', [
+	                           h('Button', { 
+	                        	   props: { type: 'primary', size: 'small' },
+	                               style: { marginRight: '5px' },
+	                               on: { 
+	                            	   click: () => {
+	                                       this.check(params.index)
+	                                   }
+	                               }
+	                           }, '查看')
+	                       ]);
+				    	}
+	                       
+	                 }
+			    }
+			],
+            dataList: [],
+            urlData:{
+                groupNum: 0,
+                subGroupNum: 0,
+                status: 0,
+                userId: 0,
+                round:0,
+                iDisplayStart: 0,
+                iDisplayLength: 10,
+                sEcho: "zy"
             }
-        });
-    });
+		}
+	},
+	methods:{
+		pageChange:function(page){
+			console.log("pageChange",page);
+			this.urlData.iDisplayStart = (page-1)*10;
+    		var that = this;
+    		$.ajax({
+    	          url: config.ajaxUrls.worksGetByPage,
+    	          type: "get",
+    	          data: this.urlData,
+    	          success: function (res) {
+    	              that.$Loading.finish();
+    	              that.dataList = res.aaData;
+    	              that.total = res.iTotalRecords;
+    	          },
+    	          error: function () {
+    	        	  that.$Loading.error();
+    	        	  that.$Notice.error({title:res.message});
+    	          }
+    	      })
+		},
+		check:function(index){
+			window.location.href = "production/workDetail/" + this.dataList[index].id;
+		},
+		change:function(index){
+			window.location.href = "production/uploadWork/" + this.dataList[index].id;
+		},
+		remove:function(index){
+			this.index = index;
+			this.deleteModal = true;
+			this.productTitle = this.dataList[index].title;
+		},
+		ok:function(){
+			var that = this;
+			this.$Loading.start();
+			$.ajax({
+              url: config.ajaxUrls.workRemove.replace(":id", this.dataList[this.index].id),
+              type: "get",
+              dataType: "json",
+              success: function (res) {
+                  if (res.success) {
+                     that.$Notice.success({title:config.messages.optSuccess});
+                     $.ajax({
+                         url: config.ajaxUrls.worksGetByPage,
+                         type: "get",
+                         data: that.urlData,
+                         success: function (res) {
+                             that.$Loading.finish();
+                             that.dataList = res.aaData;
+                             that.total = res.iTotalRecords;
+                         },
+                         error: function () {
+	                       	 that.$Loading.error();
+	                       	 that.$Notice.error({title:res.message});
+                         }
+                     })
+                  } else {
+                      that.$Notice.error({title:res.message});
+                      that.$Loading.error();
+                  }
 
-    $("#myTable").on("click", ".zyAction.zyIconRemove", function () {
-        if (confirm(config.messages.confirmDelete)) {
-            works.remove($(this));
-        }
-        return false;
-    })
-});
+              }
+          });
+		}
+	},
+	created:function(){
+		var that = this;
+		this.$Loading.start();
+		$.ajax({
+			url: config.ajaxUrls.worksGetByPage,
+          	type: "get",
+          	data: this.urlData,
+          	success: function (res) {
+              	that.$Loading.finish();
+              	that.dataList = res.aaData;
+              	that.total = res.iTotalRecords;
+          	},
+          	error: function () {
+        	  	that.$Loading.error();
+        	  	that.$Notice.error({title:res.message});
+          	}
+		})
+	}
+})

@@ -1,3 +1,14 @@
+'use strict';
+
+var appServer = 'http://localhost:8080/design/sigUploadKey/1';
+var bucket = 'dc-yxyp';
+var region = 'oss-cn-hangzhou';
+
+var urllib = OSS.urllib;
+var Buffer = OSS.Buffer;
+var OSS = OSS.Wrapper;
+var STS = OSS.STS;
+
 $(document).click(function(){  
 	$("#scoreTable").addClass("hidden");
 });
@@ -385,6 +396,7 @@ var vm = new Vue({
                 if(response.success===false){
                 	that.$Notice.error({title:response.message});
                 }else{
+  	        	  	console.log("=8******====",response);
                 	that.$Loading.finish();
                 	for(var i=0;i<response.aaData.rjList.length;i++){
                 		var roundBox = {};
@@ -406,6 +418,7 @@ var vm = new Vue({
 	          if(response.success===false){
 	          		that.$Notice.error({title:response.message});
 	          }else{
+	        	  console.log("=====",response);
 	        	  	that.dataList = response.aaData;
 	        	  	that.totalPage = response.iTotalRecords;
 	          }

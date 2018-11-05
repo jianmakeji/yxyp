@@ -1,0 +1,28 @@
+[v-cloak]{
+	display:none;
+}
+body{
+	margin:0 auto;
+}
+.workDetail{
+	width:60%;
+	margin:180px auto 20px;
+	min-height:550px;
+	text-align:center;
+}
+
+.workDetail .title{
+	margin-top:10px;
+}
+
+.workDetail .content{
+	margin-top:10px;
+}
+
+.workDetail .attachFile{
+	margin:20px auto;
+}
+
+.workDetail .produceImg{
+	
+}
