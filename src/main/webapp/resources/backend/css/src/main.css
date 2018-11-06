@@ -192,7 +192,6 @@ table.dataTable .thumb{
     position: absolute;
     left: 0;
     top: 0;
-    background:url(../../../frontend/images/app/logo_flower.png);
     background-size: cover;
 }
 /*topNav*/

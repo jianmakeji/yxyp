@@ -36,36 +36,28 @@ var vm = new Vue({
 		return{
 			groupModel:"",
 			subGroupModel:"",
-			roundModel:"",
+			roundModel:"0",
 			statusModel:"",
 			totalPage:"",
 			GroupList:[{value:"0",label:"全部"},{value:"1",label:"概念设计组"},{value:"2",label:"产品创新组"}],
 			SubGroupList:[{value:"0",label:"全部"},{value:"1",label:"康复辅具类 "},{value:"2",label:"生活益智类"},{value:"3",label:"设施环境类"},{value:"4",label:"综合服务类"}],
 			JudgeRoundList: [{value: '0',label: '全部'}],				//顶部轮次筛选
-			StatusList: [					//顶部状态筛选
+			StatusList: [												//顶部状态筛选
                 {value: '0',label: '全部'},{value: '1',label: '已提交'},{value: '2',label: '审核未通过'},{value: '3', label: '审核已通过'},{value: '4',label: '初选入围'},
                 {value: '5',label: '初选未入围'},{value: '6',label: '复选入围'},{value: '7',label: '复选未入围'}
             ],
-            statusTypes:[					//状态选择库
+            statusTypes:[												//状态选择库
                 {value: 1,label: '已提交'},{value: 2,label: '审核未通过'},{value: 3, label: '审核已通过'},{value: 4,label: '初选入围'},
                 {value: 5,label: '初选未入围'},{value: 6,label: '复选入围'},{value: 7,label: '复选未入围'}    
             ],
-            roundTypes:[],					//轮次选择库    
-            columns: [						//table列选项
+            roundTypes:[],												//轮次选择库    
+            columns: [													
                   { title: 'ID',key: 'id', align: 'center'},
                   { title: '缩略图',key: 'pimage', align: 'center',
                	   render: (h, params) => {
                           return h('img', {
-                   	   		domProps: {
-                                  type: 'primary',
-                                  size: 'small',
-                                  src:  params.row.pimage.split(',')[0] + "?x-oss-process=style/thumb-198-280"
-                              },
-                              style: {
-                                  width: '99px',
-                                  height:"140px",
-                                  margin:"10px auto"
-                              },
+                   	   		domProps: { type: 'primary', size: 'small', src: vm.productImgArr[params.index] },
+                              style: { width: '99px', height:"99px", margin:"10px auto" },
                           })
                       }
                	  },
@@ -73,13 +65,8 @@ var vm = new Vue({
                   { title: '分数',key: 'score', align: 'center',
                 	  render: (h, params) => {
                           return h('a', {
-                                  props: {
-                                      type: 'primary',
-                                      size: 'small'
-                                  },
-                                  attrs :{
-                                      href:	"javascript:void(0)"
-                                  },
+                                  props: { type: 'primary', size: 'small' },
+                                  attrs :{ href:	"javascript:void(0)" },
                                   on:{
                                 	  'click':(value,event) => {  
                   	                		this.getRoundScore(params.index, value, event); 
@@ -91,20 +78,13 @@ var vm = new Vue({
                   { title: '状态',key: 'status', align: 'center',
                 	  render: (h, params) => {  
                 	        return h('i-select', {  
-                	            props:{  
-                	                value: this.dataList[params.index].status, 
-                	            },
+                	            props:{   value: this.dataList[params.index].status},
                 	            on: {  
-                	                'on-change':(value) => {  
-                	                	this.changeStatus(params.index, value); 
-                	                }  
+                	                'on-change':(value) => {  this.changeStatus(params.index, value); }  
                 	            }
                 	        },this.statusTypes.map(function(item){  
                 	            return h('i-option', {  
-                	                props: {
-                	                	value: item.value,
-                	                	label: item.label
-                	                	}  
+                	                props: { value: item.value, label: item.label }  
                 	            }, item);  
                 	        })   
                 	        );  
@@ -113,20 +93,14 @@ var vm = new Vue({
                   { title: '所在评审轮次',key: 'round', align: 'center',
                 	  render: (h, params) => {  
               	        return h('i-select', {  
-								props:{ 
-									value: this.dataList[params.index].round,  
-								},
-								on: {  
-								    'on-change':(value) => {  
+								props:{ value: this.dataList[params.index].round,   },
+								on: {  'on-change':(value) => {  
 										this.changeRound(params.index, value); 
 									}  
 		          	            }
               	        },this.roundTypes.map(function(type){  
 	          	            return h('i-option', {  
-	          	                props: {
-	          	                	value: type.value,
-            	                	label: type.label
-	          	                	}  
+	          	                props: { value: type.value, label: type.label }  
 	          	            }, type);  
 	          	        })     
               	        );  
@@ -136,17 +110,9 @@ var vm = new Vue({
                   { title: '操作',key: 'opt', align: 'center',
                	   	render: (h, params) => {
                           return h('a', {
-                                  props: {
-                                      type: 'primary',
-                                      size: 'small'
-                                  },
-                                  attrs :{
-                                      href:	config.viewUrls.manageWorkDetail.replace(":id",this.dataList[params.index].id),
-                                      target:"_blank"
-                                  },
-                                  style: {
-                                      marginRight: '5px'
-                                  }
+                                  props: { type: 'primary', size: 'small' },
+                                  attrs :{ href:	config.viewUrls.manageWorkDetail.replace(":id",this.dataList[params.index].id), target:"_blank" },
+                                  style: { marginRight: '5px' }
                               }, "详情")
                       }
                   }
@@ -156,6 +122,7 @@ var vm = new Vue({
            	  setstatusList:{id:"",status:""},
            	  setRoundList:{productId:"",round:""},
          	  dataList:[],	
+         	  productImgArr:[],
          	  
          	  Scroecolumns: [						//table列选项
                   { title: '评审轮次',key: 'round', align: 'center'},
@@ -181,21 +148,7 @@ var vm = new Vue({
 	                }else{
 	                	that.$Loading.finish();
 	                	that.$Notice.success({title:config.messages.optSuccess});
-	        			$.ajax({
-	        	            "dataType":'json',
-	        	            "type":"post",
-	        	            "url":config.ajaxUrls.worksGetByPage,
-	        	            "data":that.aoData1,
-	        	            "success": function (response) {
-	        	                if(response.success===false){
-	        	                	that.$Notice.error({title:response.message});
-	        	                }else{
-	        	                	that.dataList = [];
-	        	                	that.dataList = response.aaData;
-	        	                	that.totalPage = response.iTotalRecords;
-	        	                }
-	        	            }
-	        	        });	
+	                	getPageData(that);
 	                }
 	            }
 	        });	
@@ -214,40 +167,10 @@ var vm = new Vue({
 	                if(response.success===false){
 	                	that.$Loading.error();
 	                	that.$Notice.error({title:"修改出错",desc:"1.作品状态无法选择评审轮次,	2.可能该轮次未绑定评委, 3.分数已更新为本轮次,无法修改"});
-	        			$.ajax({
-	        	            "dataType":'json',
-	        	            "type":"post",
-	        	            "url":config.ajaxUrls.worksGetByPage,
-	        	            "data":that.aoData1,
-	        	            "success": function (response) {
-	        	                if(response.success===false){
-	        	                	that.$Notice.error({title:response.message});
-	        	                }else{
-	        	                	that.$Loading.finish();
-	        	                	that.dataList = [];
-	        	                	that.dataList = response.aaData;
-	        	                	that.totalPage = response.iTotalRecords;
-	        	                }
-	        	            }
-	        	        });
+	                	getPageData(that);
 	                }else{
 	                	that.$Notice.success({title:config.messages.optSuccess});
-	        			$.ajax({
-	        	            "dataType":'json',
-	        	            "type":"post",
-	        	            "url":config.ajaxUrls.worksGetByPage,
-	        	            "data":that.aoData1,
-	        	            "success": function (response) {
-	        	                if(response.success===false){
-	        	                	that.$Notice.error({title:response.message});
-	        	                }else{
-	        	                	that.$Loading.finish();
-	        	                	that.dataList = [];
-	        	                	that.dataList = response.aaData;
-	        	                	that.totalPage = response.iTotalRecords;
-	        	                }
-	        	            }
-	        	        });
+	                	getPageData(that);
 	                }
 	            }
 	        });	
@@ -256,108 +179,32 @@ var vm = new Vue({
 			this.$Loading.start();
 			var that = this;
     		this.aoData1.offset = (index-1)*10;
-			$.ajax({
-	            "dataType":'json',
-	            "type":"post",
-	            "url":config.ajaxUrls.worksGetByPage,
-	            "data":this.aoData1,
-	            "success": function (response) {
-	                if(response.success===false){
-	                	that.$Loading.error();
-	                	that.$Notice.error({title:response.message});
-	                }else{
-	                	that.$Loading.finish();
-	                	that.dataList = [];
-	                	that.dataList = response.aaData;
-	                	that.totalPage = response.iTotalRecords;
-	                }
-	            }
-	        });	
+    		getPageData(this);
 		},
 		groupCheck:function(value){
         	this.$Loading.start();
 			var that = this;
 			this.aoData1.groupNum = value;
-			$.ajax({
-	            "dataType":'json',
-	            "type":"post",
-	            "url":config.ajaxUrls.worksGetByPage,
-	            "data":this.aoData1,
-	            "success": function (response) {
-	                if(response.success===false){
-	                	that.$Notice.error({title:response.message});
-	                }else{
-	                	that.$Loading.finish();
-	                	that.dataList = [];
-	                	that.dataList = response.aaData;
-	                	that.totalPage = response.iTotalRecords;
-	                }
-	            }
-	        });
+			getPageData(this);
 		},
 		subGroupCheck:function(value){
         	this.$Loading.start();
 			var that = this;
 			this.aoData1.subGroupNum = value;
-			$.ajax({
-	            "dataType":'json',
-	            "type":"post",
-	            "url":config.ajaxUrls.worksGetByPage,
-	            "data":this.aoData1,
-	            "success": function (response) {
-	                if(response.success===false){
-	                	that.$Notice.error({title:response.message});
-	                }else{
-	                	that.$Loading.finish();
-	                	that.dataList = [];
-	                	that.dataList = response.aaData;
-	                	that.totalPage = response.iTotalRecords;
-	                }
-	            }
-	        });
+			getPageData(this);
 		},
 		roundCheck:function(value){
         	this.$Loading.start();
 			var that = this;
 			this.aoData1.round = value;
-			$.ajax({
-	            "dataType":'json',
-	            "type":"post",
-	            "url":config.ajaxUrls.worksGetByPage,
-	            "data":this.aoData1,
-	            "success": function (response) {
-	                if(response.success===false){
-	                	that.$Notice.error({title:response.message});
-	                }else{
-	                	that.$Loading.finish();
-	                	that.dataList = [];
-	                	that.dataList = response.aaData;
-	                	that.totalPage = response.iTotalRecords;
-	                }
-	            }
-	        });
+			getPageData(this);
 		},
 		statusCheck:function(value){
         	this.$Loading.start();
 			var that = this;
 			this.aoData1.offset = 0;
 			this.aoData1.status = value;
-			$.ajax({
-	            "dataType":'json',
-	            "type":"post",
-	            "url":config.ajaxUrls.worksGetByPage,
-	            "data":this.aoData1,
-	            "success": function (response) {
-	                if(response.success===false){
-	                	that.$Notice.error({title:response.message});
-	                }else{
-	                	that.$Loading.finish();
-	                	that.dataList = [];
-	                	that.dataList = response.aaData;
-	                	that.totalPage = response.iTotalRecords;
-	                }
-	            }
-	        });
+			getPageData(this);
 		},
 		getRoundScore:function(index,event){
 			var that = this;
@@ -396,7 +243,6 @@ var vm = new Vue({
                 if(response.success===false){
                 	that.$Notice.error({title:response.message});
                 }else{
-  	        	  	console.log("=8******====",response);
                 	that.$Loading.finish();
                 	for(var i=0;i<response.aaData.rjList.length;i++){
                 		var roundBox = {};
@@ -406,25 +252,60 @@ var vm = new Vue({
                 		that.roundTypes.push(roundBox);
                 	}
                 }
-                that.roundModel = "0";
+//                that.roundModel = "0";
             }
         });	
-		$.ajax({
-	      "dataType":'json',
-	      "type":"post",
-	      "url":config.ajaxUrls.worksGetByPage,
-	      "data":this.aoData1,
-	      "success": function (response) {
-	          if(response.success===false){
-	          		that.$Notice.error({title:response.message});
-	          }else{
-	        	  console.log("=====",response);
-	        	  	that.dataList = response.aaData;
-	        	  	that.totalPage = response.iTotalRecords;
-	          }
-	      }
-	  });	
 		
+		getPageData(this);
 		
 	}
 })
+function getPageData(that){
+	$.ajax({
+        "dataType":'json',
+        "type":"post",
+        "url":config.ajaxUrls.worksGetByPage,
+        "data":that.aoData1,
+        "success": function (response) {
+            if(response.success===false){
+            	that.$Notice.error({title:response.message});
+            }else{
+
+            	that.$Loading.finish();
+            	that.dataList = [];
+    			//对图片进行签名获取
+        		urllib.request(appServer, {
+              		method: 'GET'
+            	}).then(function (result) {
+            	  	var creds = JSON.parse(result.data);
+            	  	if(creds.success == "true"){
+            	  		var client = initClient(creds);
+            	  		var arr = response.aaData;
+            	  		for(var j = 0;j<arr.length;j++){
+                	  		var pimg = arr[j].pimage;
+                	  		if(pimg.indexOf(",") >= 0){
+                    	  		that.productImgArr[j] = client.signatureUrl("product/"+pimg.split(",")[0], {expires: 3600,process : 'style/thumb-200-200'});
+                	  		}else{
+                	  			that.productImgArr[j] = client.signatureUrl("product/"+pimg, {expires: 3600,process : 'style/thumb-200-200'});
+                	  		}
+            	  		}
+
+                    	that.totalPage = response.iTotalRecords;
+            	  		that.dataList = response.aaData;
+            	  	}
+                });
+        		
+            }
+        }
+    });
+}
+function initClient(creds){
+	var client = new OSS({
+		region: region,
+  		accessKeyId: creds.accessKeyId,
+  		accessKeySecret: creds.accessKeySecret,
+  		stsToken: creds.securityToken,
+  		bucket: bucket
+	});
+	return client;
+}

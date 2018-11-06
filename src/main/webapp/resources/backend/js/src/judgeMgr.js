@@ -22,7 +22,7 @@ var Component = new Vue({
                     	   	domProps: {
                                    type: 'primary',
                                    size: 'small',
-                                   src: params.row.headicon	
+                                   src: Component.productImgArr[params.index]
                                },
                                style: {
                                    width: '80px',
@@ -65,6 +65,7 @@ var Component = new Vue({
                }
            ],
            dataList: [],
+           productImgArr:[],
            totalPage:"",
            deleteModal:false,
            index:"",
@@ -74,55 +75,14 @@ var Component = new Vue({
     },
     created:function(){
     	var that = this;
-    	$.ajax({
-            "dataType":'json',
-            "type":"post",
-            "url":config.ajaxUrls.judgeGetByPage,
-            "data":this.aoData1,
-            "success": function (response) {
-                if(response.success===false){
-                	that.$Notice.error({title:response.message});
-                }else{
-                	that.dataList = response.aaData;
-                	that.totalPage = response.iTotalRecords;
-                	
-                	//对图片进行签名获取
-	        		urllib.request(appServer, {
-	              		method: 'GET'
-	            	}).then(function (result) {
-	            	  	var creds = JSON.parse(result.data);
-	            	  	if(creds.success == "true"){
-	            	  		var client = initClient(creds);
-	            	  		for(var i=0;i<that.dataList.length;i++){
-	            	  			that.dataList[i].headicon = client.signatureUrl("judges/"+that.dataList[i].headicon, {expires: 3600,process : 'style/thumb-200-200'});
-	            	  		}
-	            	  	}
-	              	});
-                	
-                }
-            }
-        });	 
+    	getPageData(this);
     },
     methods:{
     	pageChange:function(changPage){
     		this.aoData1.offset = (changPage-1)*10;
     		this.dataList = [];
     		var that = this;
-    		$.ajax({
-                "dataType":'json',
-                "type":"post",
-                "url":config.ajaxUrls.judgeGetByPage,
-                "data":this.aoData1,
-                "success": function (response) {
-                	that.dataList = response.aaData;
-                    if(response.success===false){
-                    	that.$Notice.error({title:response.message});
-                    }else{
-//                    	清空数据盒，装新数据
-                    	that.dataList = response.aaData;
-                    }
-                }
-            });	 
+    		getPageData(this); 
     	},
     	change :function(index) {
     		var id = this.dataList[index].id;
@@ -145,27 +105,46 @@ var Component = new Vue({
                     	that.$Notice.error({title:response.message});
                     }else{
                     	that.$Notice.success({title:config.messages.optSuccess});
-                    	$.ajax({
-                            "dataType":'json',
-                            "type":"post",
-                            "url":config.ajaxUrls.judgeGetByPage,
-                            "data":that.aoData1,
-                            "success": function (response) {
-                                if(response.success===false){
-                                	that.$Notice.error({title:response.message});
-                                }else{
-                                	that.dataList = response.aaData;
-                                	that.totalPage = response.iTotalRecords;
-                                }
-                            }
-                        });	 
+                    	getPageData(that);
                     }
                 }
             });
         }
     }
 })
+function getPageData(that){
+	$.ajax({
+        "dataType":'json',
+        "type":"post",
+        "url":config.ajaxUrls.judgeGetByPage,
+        "data":that.aoData1,
+        "success": function (response) {
+            if(response.success===false){
+            	that.$Notice.error({title:response.message});
+            }else{
+            	     		
+        		//对图片进行签名获取
+        		urllib.request(appServer, {
+              		method: 'GET'
+            	}).then(function (result) {
+            	  	var creds = JSON.parse(result.data);
+            	  	if(creds.success == "true"){
+            	  		var client = initClient(creds);
+            	  		var arr = response.aaData;
+            	  		for(var j = 0;j<arr.length;j++){
+                	  		var pimg = arr[j].headicon;
+                	  		that.productImgArr[j] = client.signatureUrl("product/"+pimg, {expires: 3600,process : 'style/thumb-200-200'});
+            	  		}
 
+            	  		that.dataList = response.aaData;
+                    	that.totalPage = response.iTotalRecords;
+            	  	}
+                });
+            	
+            }
+        }
+    });	 
+}
 function initClient(creds){
 	var client = new OSS({
 		region: region,
