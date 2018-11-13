@@ -20,7 +20,7 @@
 <body  style="max-width:none;">
 
 	<%@ include file="header.jsp"%>
-	<div class="register" style="margin-top:200px;">
+	<div class="register" :style="registerStyle" v-cloak>
 		<i-form ref="formItem" :model="formItem" :label-width="100" :rules="ruleValidate">
 			<form-item label="注册方式">
 		        <radio-group v-model="formItem.mobileOrEmail" type="button" @on-change="radioChange">

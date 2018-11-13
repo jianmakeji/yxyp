@@ -67,6 +67,11 @@ var works = new Vue({
 			    }
 			],
             dataList: [],
+            workStyle:{
+            	minHeight:"",
+        		margin:"30px auto",
+        		width:"80%"
+            },
             urlData:{
                 groupNum: 0,
                 subGroupNum: 0,
@@ -144,6 +149,7 @@ var works = new Vue({
 		}
 	},
 	created:function(){
+		this.workStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.headHeight - config.cssHeight.footHeight - 140 + "px";
 		var that = this;
 		this.$Loading.start();
 		$.ajax({

@@ -1,0 +1,9 @@
+[ v-cloak]{
+	display:none;
+}
+
+.setPwd{
+	width:45%;
+	min-height:550px;
+	margin:220px auto 20px;
+}

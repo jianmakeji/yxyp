@@ -30,7 +30,7 @@
 	<%@ include file="header.jsp"%>
 	<%@ include file="pageMenu.jsp"%>
 	
-	<div class="resetInfo" v-cloak>
+	<div class="resetInfo" :style="resetInfoStyle" v-cloak>
 		<h2>基本信息</h2>
 		<i-form :model="formInfo" :label-width="100" :rules="ruleDataSourse">
 		   <form-item label="用户名" prop="realname">

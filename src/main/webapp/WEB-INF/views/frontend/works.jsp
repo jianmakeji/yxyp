@@ -22,7 +22,7 @@
 
 	<%@ include file="header.jsp"%>
 	<%@ include file="pageMenu.jsp"%>
-	<div class="works" v-cloak>
+	<div class="works" :style="workStyle" v-cloak>
 		<modal v-model="deleteModal" @on-ok="ok" title="警告！！！">
 	        <p style="color:#ed3f14;text-align:center">
 	            <Icon type="information-circled"></Icon>

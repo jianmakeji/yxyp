@@ -26,9 +26,7 @@
 	<%@ include file="header.jsp"%>
 	<%@ include file="pageMenu.jsp"%>
 	
-	<!-- ****************************************************************************************************************************** -->
-	
-	<div class="uploadWork" v-cloak> 
+	<div class="uploadWork" :style="uploadWorkStyle" v-cloak> 
 		<div v-show="step != '3'">
 			<row type="flex" justify="center" align="top" >
 		        <i-col class="rules" span="8">
@@ -38,26 +36,26 @@
 		        	</div>
 		        	<div class="uploadRule_2" v-show="step === '2'">
 		        		<p class="uploadRuleText">
-							<span style="color: #656464;">概念设计组：</span>主要评选出相关研究机构、高校、设计机构、自由设计师和创新发明爱好者的概念设计作品或服务方案。<br>
-							<span style="color: #656464;">产品创新组：</span>主要评选出相关企事业单位、研究机构、设计机构、自由设计师等制造生产的已完成功能开发的设计产品或综合服务系统。
+							<span style="color: #656464;">概念设计组：</span>主要评选出相关研究机构、高校、设计机构、自由设计师和相关爱好者的概念设计作品、服务设计或解决方案。<br>
+							<span style="color: #656464;">产品创新组：</span>主要评选出相关企事业单位、研究机构、设计机构、自由设计师等制造生产、运营管理的已完成功能开发、销售或投入使用的设计产品、场所或综合服务系统。<br>
 						</p>	
 						<h5 class="uploadRuleSubTitle">作品提交及报名要求</h5>
 						<p class="uploadRuleText">
-							1.<font class="improtentText">作品要求</font>:所有参赛作品内容需要符合本次大赛的主题和征集方向，参赛者须保证对其参赛作品具有原创性，具有完整的知识产权，不存在知识产权侵权或任何其他侵权行为。产品创新组限销售或投入使用5年以内（2013年1月1日以后销售或投入使用）的服务或者产品设计报名参赛。<br>
-							2.<font class="improtentText">作品提交要求</font>:所有未销售或投入使用的服务或者产品设计提交“概念设计组”参赛。已销售或投入使用的服务或者产品设计（含已取得专利的产品和服务）提交“产品创新组”参赛。
+							1.<font class="improtentText">作品要求</font>:所有参赛作品内容需要符合本次大赛的主题和征集方向，参赛者须保证对其参赛作品具有原创性，具有完整的知识产权，不存在知识产权侵权或任何其他侵权行为。产业创新组限销售或投入使用5年以内（2014年1月1日以后销售或投入使用）的服务或者产品设计报名参赛。<br>
+							2.<font class="improtentText">作品提交要求</font>:已销售或投入使用的服务或者产品设计（含已取得专利的产品和服务）提交“产业创新组”参赛。所有未销售或投入使用的服务或者产品设计提交“概念设计组”参赛。
 						</p>
 						<h5 class="uploadRuleSubTitle">概念设计组作品提交要求</h5>
 						<p class="uploadRuleText">
 							（1）作品版面大小为<font class="zyFF0000">A1</font>（840mm×594mm）图幅，<font class="improtentText">竖构图</font>，jpg格式，精度350dpi；单张图片大小<font class="improtentText">不得超过5M</font>。<br>
-							（2）每件参赛作品提交3个版面，版面内容包含主题阐释、效果图、必要的结构图、基本外观尺寸图及设计说明（必须是中英双语）等。
+							（2）每件参赛作品不超过3个版面，版面内容包含主题阐释、效果图、必要的结构图、基本外观尺寸图及设计说明（必须是中英双语）等。
 						</p>
-						<h5 class="uploadRuleSubTitle">产品创新组作品提交要求</h5>
+						<h5 class="uploadRuleSubTitle">产业创新组作品提交要求</h5>
 						<p class="uploadRuleText">
 							（1）提交3张高精度（350dpi以上）产品实物照片，单张图片大小<font class="improtentText">不得超过5M</font>。<br>
-							（2）填写产品/服务设计说明（300字以内），并提交相应的辅助资料（如说明书扫描文档，产品/服务网页链接等信息）。
+							（2）填写产品/服务设计说明（300字以内），并提交相应的辅助资料（如产品/服务网页链接等信息）。
 						</p>
 						<p class="uploadRuleText">
-							为保证本次大赛评选的公正性，参赛作品及版面上不得出现作者所在单位、姓名（包括英文或拼音缩写）或与作者身份有关的任何图标、图形等个人信息资料。
+							另外，为保证本次大赛评选的公正性，参赛作品及版面上不得出现作者所在单位、姓名（包括英文或拼音缩写）或与作者身份有关的任何图标、图形等个人信息资料。
 						</p>
 		        	</div>
 		        </i-col>
@@ -127,10 +125,10 @@
 								</form-item>
 								<form-item label="作品类型">
 									<radio-group v-model="formItem.subGroupNum" @on-change="userInfoChange">
-								        <radio label="1" value="1">康复辅具类</radio>
-								        <radio label="2" value="2">生活益智类</radio>
-								        <radio label="3" value="3">设施环境类 </radio>
-								        <radio label="4" value="4">综合服务类</radio>
+								        <radio label="1" value="1">精准农业类</radio>
+								        <radio label="2" value="2">非遗文创类</radio>
+								        <radio label="3" value="3">文旅休闲类 </radio>
+								        <radio label="4" value="4">品牌农业类</radio>
 								    </radio-group>
 								</form-item>
 								<form-item label="图幅一" prop="fileName_1">

@@ -19,6 +19,11 @@ var resetInfo = new Vue({
         		password:[{ required: true, min: 6, message: '请字数控制在6以上', trigger: 'blur' }],
     			confirmPwd:[{ required: true, min:6, message: '请字数控制在6以上', trigger: 'blur' }]
         	},
+        	resetInfoStyle:{
+        		width:"40%",
+	        	minHeight:"",
+	        	margin:"20px auto"
+        	},
         	pwdRuleDataSourse:"",
         	newPwd:"",
         	showPwdError:false
@@ -84,6 +89,8 @@ var resetInfo = new Vue({
     			this.showPwdError = true;
     		}
     	}
+	},
+	created:function(){
+		this.resetInfoStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.headHeight - config.cssHeight.footHeight - 120 + "px";
 	}
-
 })

@@ -50,6 +50,10 @@ var uploadWork = new Vue({
 				content_en:[{ required: true, message: '此项不能为空', trigger: 'blur' }],
 				fileName_1:[{ required: true, message: '此项不能为空', trigger: 'blur' }]
 			},
+			uploadWorkStyle:{
+				marginTop:"30px",
+				minHeight:""
+			},
 			fileName_1:"",	//上传文件名称参数（测试）
 			imgUrl_1:"",
 			progressPercent_1:0,	
@@ -91,15 +95,15 @@ var uploadWork = new Vue({
             	this.step = "2";
             	this.current = 1;
         	}else{
-        		this.$Notice.error({title:"请输入相关信息"});
+        		this.$Notice.error({title:"请输入参赛者信息"});
         	}
         },
         goStep3:function(){
-        	if(this.formItem.participantName && this.formItem.participantIdNumber  && this.formItem.participantBrief){
+        	if(this.formItem.title && this.formItem.content){
             	this.step = "3";
             	this.current = 2;
         	}else{
-        		this.$Notice.error({title:"请输入相关信息"});
+        		this.$Notice.error({title:"请输入作品信息"});
         	}
         },
         //上传第一件作品
@@ -184,6 +188,7 @@ var uploadWork = new Vue({
         }
 	},
 	created:function(){
+		this.uploadWorkStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.headHeight - config.cssHeight.footHeight - 110 + "px";
 		var that = this;
 	    if (id) {
 	        this.submitUrl = config.ajaxUrls.workUpdate;

@@ -7,37 +7,32 @@
 <%@ include file="../head.jsp"%>
 
 <link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
-<link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/forgetPwd.css" type="text/css" rel="stylesheet">
+
+<!-- vue和iview引用文件 -->
+<link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
+<script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
 </head>
 <body style="max-width:none;">
 	<%@ include file="header.jsp"%>
-
-	<div class="zyMargin60">
-		<form id="myForm" class="zyForm" method="post" action="#">
-			<div class="zyFormRow">
-				<label class="zyFormLabel"></span><spring:message code="email"/>*</label>
-				<div class="zyFormControl">
-					<input type="text" class="zyInput" name="email">
-				</div>
-			</div>
-			<div class="zyFormRow">
-				<label class="zyFormLabel"></span><spring:message code="verification_code"/>*</label>
-				<div class="zyFormControl">
-					<input type="text" class="zyInput" name="rand" style="width: 200px;"> <img src="user/getCode"
-						style="display: inline-block; vertical-align: middle; height: 32px; width: auto;">
-				</div>
-			</div>
-			<div class="zyFormRow">
-				<div class="zyFormControl">
-					<button type="submit" class="zyBtn"></span><spring:message code="determine"/></button>
-				</div>
-			</div>
-		</form>
-
+	
+	<div class="forgetPwd" :style="forgetPwdStyle" v-cloak>
+		<i-form ref="formItem" :model="formItem" :label-width="100" :rules="ruleValidate">
+			<form-item label="邮箱" prop="email">
+	            <i-input type="email" v-model="formItem.email" placeholder="请输入邮箱"></i-input>
+	        </form-item>
+	        <form-item label="验证码" prop="rand">
+	            <i-input type="text" v-model="formItem.rand" style="width:200px;" placeholder="请重新图片验证码"></i-input>
+	            <img src="user/getCode" class="zyActiveCode" style="display: inline-block; vertical-align: middle; height: 32px; width: auto;">
+	        </form-item>
+	        <form-item>
+	            <i-button type="primary" long @click="submit">提交</i-button>
+	        </form-item>
+	    </i-form>
 	</div>
 	<%@ include file="footer.jsp"%>
-	<%@ include file="loading.jsp"%>
 
 	<script>
 		var pageName = "forgetPwd";

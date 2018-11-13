@@ -8,9 +8,16 @@
 <%@ include file="../head.jsp"%>
 
 <link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
-<link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/setPwd.css" type="text/css" rel="stylesheet">
 
+<!-- vue和iview引用文件 -->
+<link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
+<script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script>
+	var code = '${resultModel.object}';
+</script>
 </head>
 
 <body>
@@ -22,39 +29,22 @@
         </c:if>
 
 	<c:if test="${resultModel.success == true}">
-
-		<div class="zyMargin60">
-
-			<form id="myForm" class="zyForm" method="post" action="#">
-				<input type="hidden" name="code" value="${resultModel.object}">
-				<div class="zyFormRow">
-					<label class="zyFormLabel"><spring:message code="email"/>*</label>
-					<div class="zyFormControl">
-						<input type="text" class="zyInput" name="email">
-					</div>
-				</div>
-
-				<div class="zyFormRow">
-					<label class="zyFormLabel"><spring:message code="password"/>*</label>
-					<div class="zyFormControl">
-						<input type="password" class="zyInput" name="newPwd" id="newPwd">
-					</div>
-				</div>
-
-				<div class="zyFormRow">
-					<label class="zyFormLabel"><spring:message code="confirm_password"/>*</label>
-					<div class="zyFormControl">
-						<input type="password" class="zyInput" name="confirmPwd">
-					</div>
-				</div>
-
-				<div class="zyFormRow">
-					<div class="zyTCenter">
-						<button type="submit" class="zyBtn"><spring:message code="determine"/></button>
-					</div>
-				</div>
-			</form>
-
+		
+		<div class="setPwd" v-cloak>
+			<i-form ref="formItem" :model="formItem" :label-width="100" :rules="ruleValidate">
+				<form-item label="邮箱" prop="email">
+		            <i-input type="email" v-model="formItem.email" placeholder="请输入邮箱"></i-input>
+		        </form-item>
+		        <form-item label="新密码" prop="newPwd">
+		            <i-input type="password" v-model="formItem.newPwd" placeholder="请输入密码"></i-input>
+		        </form-item>
+		        <form-item label="确认密码" prop="confirmPwd">
+		            <i-input type="password" v-model="formItem.confirmPwd" @on-blur="conPwdBlur" placeholder="请重新输入密码"></i-input>
+		        </form-item>
+		        <form-item>
+		            <i-button type="primary" long @click="submit">提交</i-button>
+		        </form-item>
+		    </i-form>
 		</div>
 	</c:if>
 
@@ -65,12 +55,7 @@
 	</script>
 
 	<script src="resources/js/lib/jquery-1.10.2.min.js"></script>
-	<script src="resources/js/lib/jquery.toastmessage.js"></script>
-	<script src="resources/js/lib/jquery.form.js"></script>
-	<script src="resources/js/lib/jquery.validate.min.js"></script>
 	<script src="resources/frontend/js/src/config.js"></script>
-	<script src="resources/js/src/functions.js"></script>
-	<script src="resources/js/src/ZYFormHandler.js"></script>
 	<script src="resources/frontend/js/src/setPwd.js"></script>
 	<script src="resources/frontend/js/src/header.js"></script>
 </body>

@@ -40,6 +40,12 @@ var register = new Vue({
               	    {min:6, message: '密码至少为6位', trigger: 'blur'}
             	],
             	activecode:{required: true, message: '验证码不能为空', trigger: 'blur'}
+            },
+            registerStyle:{
+            	width:"40%",
+            	margin:"0 auto",
+            	marginTop:config.cssHeight.headHeight + 40 + "px",
+            	minHeight:""
             }
 		}
 	},
@@ -157,6 +163,9 @@ var register = new Vue({
                 }
             })
         }
+    },
+    created:function(){
+    	this.registerStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.footHeight - config.cssHeight.headHeight - 40 + "px";
     }
 })
 function clock(that){

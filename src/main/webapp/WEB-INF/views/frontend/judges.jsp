@@ -6,53 +6,38 @@
 <html>
 <head>
 <%@ include file="../head.jsp"%>
-<link href="resources/frontend/css/src/JMCSS/Judge.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/JMCSS/Header.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/Judge.css" type="text/css" rel="stylesheet">
+
+<!-- vue和iview引用文件 -->
+<link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
+<script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
+<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
 </head>
 <body>
 
 	<%@ include file="header.jsp"%>
-	<div id="JMJudge">
-		<section style="color: #5c5c5c; font-size: 20pt;margin: 60px 5% 0px 8%;">初评评委</section>
-		<ul class="JMList2">
-			<c:forEach items="${judgeList}" var="item">
-				<c:if test="${item.id <= 54}">
-				   <%-- <p>我的工资为: <c:out value="${salary}"/><p> --%>
-				   <li class="JMItem">
-				   		<a class="JMLink" href="judge/judgeDetail/${item.id}"> <img class="JMThumb" src="${item.headicon}">
+
+	<div id="judge" class="JMJudge" v-cloak :style="judgeStyle">
+		<row>
+	        <i-col span="14" push="5">
+				<ul class="JMList2">
+				   <li class="JMItem" v-for="item in dataList">
+				   		<a class="JMLink" :href="'judge/judgeDetail/' + item.id"> <img class="JMThumb" :src="item.headicon">
 							<div class="JMInfo">
-								<h3 class="JMTitle">${item.name}</h3>
-								<div class="JMExcerpt">${item.subTitle}</div>
+								<h3 class="JMTitle">{{item.name}}</h3>
+								<div class="JMExcerpt">{{item.subTitle}}</div>
 							</div>
 						</a>
 						<hr class="JMJudgeLine">
 					</li>
-				</c:if>
-
-			</c:forEach>
-
-		</ul>
-		
-		<section style="color: #5c5c5c; font-size: 20pt;margin: 60px 5% 0px 8%;">终评评委</section>
-		<ul class="JMList2">
-			
-			<c:forEach items="${judgeList}" var="item">
-				<c:if test="${item.id > 54}">
-					<li class="JMItem">
-						<a class="JMLink" href="judge/judgeDetail/${item.id}"> <img class="JMThumb" src="${item.headicon}">
-							<div class="JMInfo">
-								<h3 class="JMTitle">${item.name}</h3>
-								<div class="JMExcerpt">${item.subTitle}</div>
-							</div>
-						</a>
-						<hr class="JMJudgeLine">
-					</li>
-				</c:if>
-			</c:forEach>
-
-		</ul>
+				</ul>
+			</i-col>
+	    </row>
 	</div>
-
+	
 	<%@ include file="footer.jsp"%>
 	<script>
 		var pageName = "judge";
@@ -60,23 +45,6 @@
 	<script src="resources/js/lib/jquery-1.10.2.min.js"></script>
 	<script src="resources/frontend/js/src/config.js"></script>
 	<script src="resources/frontend/js/src/header.js"></script>
-
-	<script>
-		$(document)
-				.ready(
-						function() {
-							var documentHeight = $(document.body).height(), JMJudgeListHeight = $(
-									"#JMJudge").height(), JMFooterHeight = $(
-									".JMFooter").height(), addHeight = documentHeight
-									- JMFooterHeight, totalHeight = JMJudgeListHeight
-									+ JMFooterHeight;
-							if (totalHeight < documentHeight) {
-								$("#JMJudge").css({
-									"min-height" : addHeight + "px"
-								});
-							}
-						})
-	</script>
-
+	<script src="resources/frontend/js/src/judges.js"></script>
 </body>
 </html>

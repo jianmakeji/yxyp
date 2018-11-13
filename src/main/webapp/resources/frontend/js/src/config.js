@@ -41,6 +41,10 @@ var config = {
     perLoadCounts:{
         table:12	//请求12条数据	10
     },
+    cssHeight:{
+    	headHeight:160,
+    	footHeight:80
+    },
     ajaxUrls: {
         imageGet: "file/image",
         fileGet: "file/downloadFile",
@@ -59,7 +63,10 @@ var config = {
         judgeToScoreList:"review/getReviewListByUserId",
         judgeScore:"review/updateReviewScore",
         sendMobileCode:"sms/sendMessage?mobile=",
-        vertifyCode:"sms/vertifyCode"
+        vertifyCode:"sms/vertifyCode",
+        
+        manageNews:"news/findManageNewsByPage",
+        judgeGetByPage:"judge/getAllJudge"
     },
     viewUrls: {
         login: "login",
