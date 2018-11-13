@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cidic</groupId>
-	<artifactId>design</artifactId>
-	<name>DesignYL</name>
+	<artifactId>yxyp</artifactId>
+	<name>design_yxyp</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -363,7 +363,16 @@
 		  <artifactId>aliyun-java-sdk-core</artifactId>
 		  <version>4.1.2</version>
 		</dependency>
+		
+		<dependency>
+            <groupId>cn.com</groupId>
+            <artifactId>CCP_REST_SMS_SDK_JAVA_v2.6.3r</artifactId>
+            <version>2.6.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/CCP_REST_SMS_SDK_JAVA_v2.6.3r.jar</systemPath> 
+        </dependency>
 	</dependencies>
+	
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>
