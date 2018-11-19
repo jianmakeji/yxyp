@@ -92,9 +92,9 @@
 	<script src="resources/js/lib/vue.min.js"></script>
 	<script src="resources/js/lib/velocity.min.js"></script>
 	<script src="resources/backend/js/lib/swiper.js"></script>
-	<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
 	<script src="resources/js/lib/iview.min.js"></script>
-	<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
+	<script src="resources/js/lib/promise.js"></script>
+	<script type="text/javascript" src="resources/js/lib/aliyun-oss-sdk.min.js"></script>
 	<script src="resources/frontend/js/src/header.js"></script>
 	<script src="resources/frontend/js/src/config.js"></script>
 	<script src="resources/frontend/js/src/judge/judge.js"></script>

@@ -23,6 +23,16 @@ body{
 	margin:20px auto;
 }
 
-.workDetail .produceImg{
-	
+.backTitle{
+	text-align: center;
+    font-size: 24px;
+    color: #47a8a9;
+}
+
+.backText{
+	text-indent: 2em;
+    font-size: 15px;
+    line-height: 1.5em;
+    color:#6d6d6d; 
+    text-align: left;
 }

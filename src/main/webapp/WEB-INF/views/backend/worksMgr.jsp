@@ -7,15 +7,13 @@
 <%@ include file="../head.jsp"%>
 
 <link href="resources/backend/css/lib/bootstrap.min.css" type="text/css" rel="stylesheet">
-<link href="resources/backend/css/lib/jquery.dataTables.css" type="text/css" rel="stylesheet">
-<link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
 <link href="resources/backend/css/src/main.css" type="text/css" rel="stylesheet">
 <!-- vue和iview引用文件 -->
 <link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
 <script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
 <script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
-<script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
-<script type="text/javascript" src="http://gosspublic.alicdn.com/aliyun-oss-sdk.min.js"></script>
+<script src="resources/js/lib/promise.js"></script>
+<script type="text/javascript" src="resources/js/lib/aliyun-oss-sdk.min.js"></script>
 </head>
 <body>
 

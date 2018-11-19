@@ -4,7 +4,7 @@
 <meta content="webkit" name="renderer">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 <meta content="telephone=no" name="format-detection" />
-<meta name="keywords" content="2018首届中国养老产品暨康复辅具设计大赛" />
-<meta name="description" content="2018首届中国养老产品暨康复辅具设计大赛">
+<meta name="keywords" content="首届中国“一乡一品”文创大赛" />
+<meta name="description" content="首届中国“一乡一品”文创大赛">
 <base id="baseUrl" href="<%=request.getContextPath()%>/" />
-<title>2018首届中国养老产品暨康复辅具设计大赛</title>
+<title>首届中国“一乡一品”文创大赛</title>

@@ -40,7 +40,7 @@ var vm = new Vue({
 			statusModel:"",
 			totalPage:"",
 			GroupList:[{value:"0",label:"全部"},{value:"1",label:"概念设计组"},{value:"2",label:"产品创新组"}],
-			SubGroupList:[{value:"0",label:"全部"},{value:"1",label:"康复辅具类 "},{value:"2",label:"生活益智类"},{value:"3",label:"设施环境类"},{value:"4",label:"综合服务类"}],
+			SubGroupList:[{value:"0",label:"全部"},{value:"1",label:"精准农业类 "},{value:"2",label:"非遗文创类"},{value:"3",label:"文旅休闲类"},{value:"4",label:"品牌农业类"}],
 			JudgeRoundList: [{value: '0',label: '全部'}],				//顶部轮次筛选
 			StatusList: [												//顶部状态筛选
                 {value: '0',label: '全部'},{value: '1',label: '已提交'},{value: '2',label: '审核未通过'},{value: '3', label: '审核已通过'},{value: '4',label: '初选入围'},
@@ -145,10 +145,10 @@ var vm = new Vue({
 	            "success": function (response) {
 	                if(response.success===false){
 	                	that.$Notice.error({title:response.message});
+	                	getPageData(that);
 	                }else{
 	                	that.$Loading.finish();
 	                	that.$Notice.success({title:config.messages.optSuccess});
-	                	getPageData(that);
 	                }
 	            }
 	        });	
@@ -170,7 +170,6 @@ var vm = new Vue({
 	                	getPageData(that);
 	                }else{
 	                	that.$Notice.success({title:config.messages.optSuccess});
-	                	getPageData(that);
 	                }
 	            }
 	        });	

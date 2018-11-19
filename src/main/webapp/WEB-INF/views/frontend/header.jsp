@@ -20,9 +20,9 @@
 	<div class="JMTopNav">
 		<ul class="JMMenu">
 			<li class="JMItem"><a class="JMLink" href="judge/judge" data-page-name="judge">评委</a></li>
-			<li class="JMItem"><a class="JMLink" href="rule/rules" data-page-name="rule"><spring:message code="regulations"/></a></li>
-			<li class="JMItem"><a class="JMLink" href="news/news/1" data-page-name="news"><spring:message code="news"/></a></li>
-			<li class="JMItem"><a class="JMLink" href="index" data-page-name="index"><spring:message code="home"/></a></li>
+			<li class="JMItem"><a class="JMLink" href="rule/rules" data-page-name="rule">章程</a></li>
+			<li class="JMItem"><a class="JMLink" href="news/news/1" data-page-name="news">新闻</a></li>
+			<li class="JMItem"><a class="JMLink" href="index" data-page-name="index">首页</a></li>
 		</ul>
 
 		<ul class="JMUserMenu">

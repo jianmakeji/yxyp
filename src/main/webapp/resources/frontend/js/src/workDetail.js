@@ -14,6 +14,10 @@ var workDetail = new Vue({
 	el:".workDetail",
 	data:function(){
 		return{
+			participantName:"",
+			participantIdNumber:"",
+			participantBrief:"",
+			
 			title:"",
 			content:"",
 			attachFileDownload:"",
@@ -34,6 +38,12 @@ var workDetail = new Vue({
             	  that.title = response.object.title;
             	  that.content = response.object.content;
             	  that.attachFile = response.object.attachFile;
+            	  
+
+            	  that.participantName = response.object.participantName;
+            	  that.participantIdNumber = response.object.participantIdNumber;
+            	  that.participantBrief = response.object.participantBrief;
+            	  
             	  that.attachFileDownload = "file/downloadFile?filePath=" + response.object.attachFile;
 
             	  var pimageArr = response.object.pimage.split(",");
@@ -46,18 +56,15 @@ var workDetail = new Vue({
 	            	  		var client = initClient(creds);
 	            	  		for(var i=0;i<pimageArr.length;i++){ 
 	            	  			if(i == 0){
-	            	  				that.productImg_1 = client.signatureUrl("product/"+pimageArr[0], {expires: 3600,process : 'style/thumb-200-200'});
+	            	  				that.productImg_1 = client.signatureUrl("product/"+pimageArr[0]);
 	            	  			}else if(i == 1){
-	            	  				that.productImg_2 = client.signatureUrl("product/"+pimageArr[1], {expires: 3600,process : 'style/thumb-200-200'});
+	            	  				that.productImg_2 = client.signatureUrl("product/"+pimageArr[1]);
 	            	  			}else if(i == 2){
-	            	  				that.productImg_3 = client.signatureUrl("product/"+pimageArr[2], {expires: 3600,process : 'style/thumb-200-200'});
+	            	  				that.productImg_3 = client.signatureUrl("product/"+pimageArr[2]);
 	            	  			}
 	            	  		}
 	            	  	}
 	              	});
-            	  
-
-        	  		console.log("111111",that.productImgArr);
               } else {
                   functions.ajaxReturnErrorHandler(response.message);
               }

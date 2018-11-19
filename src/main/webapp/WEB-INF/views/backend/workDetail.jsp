@@ -6,39 +6,35 @@
 <html>
 <head>
 <%@ include file="../head.jsp"%>
-<link href="resources/css/lib/jquery.toastmessage.css" type="text/css" rel="stylesheet">
 <link href="resources/frontend/css/src/main.css" type="text/css" rel="stylesheet">
+<link href="resources/frontend/css/src/JMCSS/workDetail.css" type="text/css" rel="stylesheet">
+
+<!-- vue和iview引用文件 -->
+<link rel="stylesheet" type="text/css" href="resources/css/lib/iview.css">
+<script type="text/javascript" src="resources/js/lib/vue.min.js"></script>
+<script type="text/javascript" src="resources/js/lib/iview.min.js"></script>
+<script src="resources/js/lib/promise.js"></script>
+<script type="text/javascript" src="resources/js/lib/aliyun-oss-sdk.min.js"></script>
 <script>
 	var productionId = '${production.id}';
 </script>
 </head>
-<body style="padding-top:20px">
-
-	<div class="zyWorkDetail zyMargin150" id="zyWorkDetail">
-		<h3 class="zyTitle" style="text-align:center;">${production.title}</h3>
-		
-		<span>${production.participantName}</span>
-		<p class="zyText">证件号码：${production.participantIdNumber}</p>
-		<p class="zyText">个人/团队 简介：${production.participantBrief}</p>
-		
-		<p class="zyText">设计介绍：${production.content}</p>
-		
-		<c:if test="${!empty production.attachFile}">
-			<div class="zy20C7BE">
-				附件下载:&nbsp;&nbsp;<a class="zy20C7BE" href="file/downloadFile?filePath=${production.attachFile}" target="_blank">${production.attachFile}</a>
+<body style="max-width:none;">
+	<div class="workDetail" v-cloak>
+			<h3 class="backTitle">{{title}}</h3>
+			<span>{{participantName}}</span>
+			<p class="backText">证件号码：{{participantIdNumber}}</p>
+			<p class="backText">个人/团队 简介：{{participantBrief}}</p>
+			<p class="backText">设计介绍：{{content}}</p>
+			<div class="backText" v-show="attachFile">
+				附件下载:&nbsp;&nbsp;<a :href="attachFileDownload" target="_blank">{{attachFile}}</a>
 			</div>
-			<br>
-		</c:if>
-		<%-- <c:if test="${!empty production.pimage}">
-			<div class="zy20C7BE">
-				<img src="${production.pimage}" style="margin:10px auto;">
+			<div class="produceImg">
+				<img :src="productImg_1" style="margin:10px auto;"/>
+				<img :src="productImg_2" style="margin:10px auto;"/>
+				<img :src="productImg_3" style="margin:10px auto;"/>
 			</div>
-			<br>
-		</c:if> --%>
-
-
-	</div>
-
+		</div>
 	<script>
 		var pageName = "xxx";
 	</script>
