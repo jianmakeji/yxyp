@@ -53,10 +53,6 @@
 			</div>
 		</article>
 	</section>
-
-	<%@ include file="loading.jsp"%>
-
-
 	<script>
 		var pageName = "news";
 	</script>

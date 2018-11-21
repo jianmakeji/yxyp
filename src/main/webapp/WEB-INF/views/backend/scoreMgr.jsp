@@ -22,7 +22,7 @@
 
 	<section class="right">
 		<article class="main">
-			<i-col span="24">评审管理</i-col>
+			<i-col span="24">评审管理</i-col><br/><br/>
 			 <i-form :model="formItem" :label-width="180" style="width:80%;" id="myForm" v-cloak>
 				<form-item label="轮次*">
 					<i-select :value="roundModel" @on-change="roundCheck" >
@@ -36,9 +36,6 @@
 		</article>
 	
 	</section>
-
-	<%@ include file="loading.jsp"%>
-
 	<script>
 		var pageName = "sendEmail";
 	</script>

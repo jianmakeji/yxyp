@@ -133,20 +133,25 @@ var vm = new Vue({
 	                                   }
 	                               }
 	                           }, '修改'),
-	                           h('Button', {
-	                               props: {
-	                                   type: 'error',
-	                                   size: 'small'
-	                               },
-	                               style: {
-	                                   marginRight: '5px'
+	                           h('poptip',{
+	                        	   props: {
+	                        		   confirm: true,
+	                        		   transfer:true,
+	                        		   title: '确定删除此项？'
 	                               },
 	                               on: {
-	                                   click: () => {
-	                                       this.removeRound(params.index)
+	                            	   "on-ok": () => {
+	                                       this.deleteOK(params.index)
 	                                   }
 	                               }
-	                           }, '删除')
+	                           }, [
+	                               h('Button',{
+	                            	   props: {
+		                                   type: 'error',
+		                                   size: 'small'
+	                            	   }
+	                               },"删除")
+	                           ])
 	                       ]);
 	                   }
 		          }
@@ -196,23 +201,20 @@ var vm = new Vue({
     		var id = this.dataList[index].id;
     		window.location.href= config.viewUrls.judgeRoundUpdate.replace(":id",id);
 		},
-		removeRound:function(index){
-			this.judgeRoundTitle = this.dataList[index].roundName;
-			this.deleteModal = true;
-			this.index = index;
-		},
-		deleteOK:function(){
-			this.deleteModal = false;
-			var id = this.dataList[this.index].id;
+		deleteOK:function(index){
+			var id = this.dataList[index].id;
         	var that = this;
+        	this.$Loading.start();
         	$.ajax({
                 "dataType":'json',
                 "type":"post",
                 "url":config.ajaxUrls.judgeRoundRemove.replace(":id",id),
                 "success": function (response) {
                     if(response.success===false){
+                    	that.$Loading.error();
                         that.$Notice.error({title:response.message});
                     }else{
+                    	that.$Loading.finish();
                     	that.$Notice.success({title:config.messages.optSuccess});
                     	$.ajax({
                             "dataType":'json',

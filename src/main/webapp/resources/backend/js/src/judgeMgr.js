@@ -49,17 +49,25 @@ var Component = new Vue({
                                    }
                                }
                            }, '修改'),
-                           h('Button', {
-                               props: {
-                                   type: 'error',
-                                   size: 'small'
+                           h('poptip',{
+                        	   props: {
+                        		   confirm: true,
+                        		   transfer:true,
+                        		   title: '确定删除此项？'
                                },
                                on: {
-                                   click: () => {
-                                       this.remove(params.index)
+                            	   "on-ok": () => {
+                                       this.ok(params.index)
                                    }
                                }
-                           }, '删除')
+                           }, [
+                               h('Button',{
+                            	   props: {
+	                                   type: 'error',
+	                                   size: 'small'
+                            	   }
+                               },"删除")
+                           ])
                        ]);
                    }
                }
@@ -67,9 +75,6 @@ var Component = new Vue({
            dataList: [],
            productImgArr:[],
            totalPage:"",
-           deleteModal:false,
-           index:"",
-           judgeTitle:"",
            judgeHeadIconArr:[]
         }
     },
@@ -88,14 +93,10 @@ var Component = new Vue({
     		var id = this.dataList[index].id;
     		window.location.href=config.viewUrls.judgeUpdate.replace(":id",id);
         },
-        remove :function(index) {
-        	this.judgeTitle = this.dataList[index].name;
-        	this.index = index;
-        	this.deleteModal = true;
-        },
-        ok :function() {
-        	var id = this.dataList[this.index].id;
+        ok :function(index) {
+        	var id = this.dataList[index].id;	//poptip删除
         	var that = this;
+        	this.$Loading.start();
         	$.ajax({
                 "dataType":'json',
                 "type":"post",
@@ -103,7 +104,9 @@ var Component = new Vue({
                 "success": function (response) {
                     if(response.success===false){
                     	that.$Notice.error({title:response.message});
+                    	that.$Loading.error();
                     }else{
+                    	that.$Loading.finish();
                     	that.$Notice.success({title:config.messages.optSuccess});
                     	getPageData(that);
                     }
