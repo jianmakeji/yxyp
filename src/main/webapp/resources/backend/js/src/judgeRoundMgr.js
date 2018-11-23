@@ -168,13 +168,13 @@ var vm = new Vue({
             judgeRoundTitle:"",
 			aoData1:{offset: 0,limit: 100},
 	      	setJudgeData:{
-	      		roundId:0, 			//轮次id		0
-  		      	judges:"",			//确定好的评委id		1	
+	      		roundId:0, 				//轮次id		0
+  		      	judges:"",				//确定好的评委id		1	
   		      	deleteJudges:"",		//改动评委id(删除)	2
   		      	addJudges:""
 	      	},	
 	      	setJudgeData1:{
-	      		id:0, 			//轮次id		0
+	      		id:0, 					//轮次id		0
 	      		judge:""
 	      	}
 		}
@@ -362,6 +362,7 @@ var vm = new Vue({
 	},
 	created:function(){
 		var that = this;
+		this.$Loading.start();
 		$.ajax({
             "dataType":'json',
             "type":"get",
@@ -369,8 +370,10 @@ var vm = new Vue({
             "data":that.aoData1,
             "success": function (response) {
             	if(response.success===false){
+            		that.$Loading.error();
             		that.$Notice.error({title:response.message});
                 }else{
+                	that.$Loading.finish();
                 	that.dataList = response.aaData.rjList;
                 	initOtherData(response.aaData.rjList, that.checkAllGroup, that.dataL, that.oldJudgeData);
 //	               	筛选出该轮次有哪些评委,并将id转为name 放在that.dataL中

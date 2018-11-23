@@ -56,6 +56,7 @@ var Component = new Vue({
     },
     created:function(){
     	var that = this;
+    	this.$Loading.start();
     	$.ajax({
             "dataType":'json',
             "type":"post",
@@ -63,8 +64,10 @@ var Component = new Vue({
             "data":this.aoData1,
             "success": function (response) {
                 if(response.success===false){
+                	that.$Loading.error();
                 	that.$Notice.error({title:response.message});
                 }else{
+                	that.$Loading.finish();
                 	that.dataList = response.aaData;
                 	that.totalPage = response.iTotalRecords;
                 }
@@ -76,6 +79,7 @@ var Component = new Vue({
     		this.aoData1.offset = (changPage-1)*10;
     		this.dataList = [];
     		var that = this;
+    		this.$Loading.start();
     		$.ajax({
                 "dataType":'json',
                 "type":"post",
@@ -84,8 +88,10 @@ var Component = new Vue({
                 "success": function (response) {
                 	that.dataList = response.aaData;
                     if(response.success===false){
+                    	that.$Loading.error();
                     	that.$Notice.error({title:response.message});
                     }else{
+                    	that.$Loading.finish();
                     	that.dataList = response.aaData;
                     	that.totalPage = response.iTotalRecords;
                     }

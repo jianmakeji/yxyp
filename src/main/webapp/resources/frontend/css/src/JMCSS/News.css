@@ -28,6 +28,7 @@
     right: 30px;
 } 
 .JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox .JMNewsText_date{
+	font-size:1vw;
 	color:#818181;
   	font-weight: bold;
  	 margin: 5px;
@@ -46,4 +47,68 @@
 }
 .JMNewsList .JMNewsListUl .JMNews hr{
   border: 1px solid #47a8a9;
+}
+
+@media screen and (max-width: 768px){ /*当屏幕尺寸小于768px时，应用下面的CSS样式*/
+ 
+	.JMNewsList .JMNewsListUl .JMNews{
+	  	height: auto;
+	}
+	.JMNewsList .JMNewsListUl .JMNews img{
+	    width: 25%;
+	    height: auto;
+	    margin: 5% 5% 5% 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox{
+	    margin-top: 5%;
+	    margin-left: 0;
+	    margin-right: 0;
+	    left: 35%;
+	    right: 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox .JMNewsText_title{
+	  font-size: 2vw;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px){  /* 当屏幕尺寸小于992px时，应用下面的CSS样式 */
+	.JMNewsList .JMNewsListUl .JMNews{
+	  	height: auto;
+	}
+	.JMNewsList .JMNewsListUl .JMNews img{
+	    width: 20%;
+	    height: auto;
+	    margin: 5% 5% 5% 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox{
+	    margin-top: 5%;
+	    margin-left: 0;
+	    margin-right: 0;
+	    left: 30%;
+	    right: 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox .JMNewsText_title{
+	  font-size: 2vw;
+	}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px){  /* 当屏幕尺寸小于1200px时，应用下面的CSS样式 */
+	.JMNewsList .JMNewsListUl .JMNews{
+	  	height: auto;
+	}
+	.JMNewsList .JMNewsListUl .JMNews img{
+	    width: 18%;
+	    height: auto;
+	    margin: 3% 5% 3% 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox{
+	    margin-top: 5%;
+	    margin-left: 0;
+	    margin-right: 0;
+	    left: 30%;
+	    right: 5%;
+	}
+	.JMNewsList .JMNewsListUl .JMNews .JMNewsTextBox .JMNewsText_title{
+	  font-size: 2vw;
+	}
 }

@@ -36,6 +36,7 @@ var judgeCOU = new Vue({
     },
     created:function(){
     	this.dataSourse.id = window.location.href.split("judge/judgeCOU/")[1];
+    	this.$Loading.start();
     	if(this.dataSourse.id){
     		var that = this;
     		var url = config.ajaxUrls.judgeDetail.replace(":id",this.dataSourse.id);
@@ -46,8 +47,7 @@ var judgeCOU = new Vue({
                 data:{id:that.dataSourse.id},
                 success:function(response){
                     if(response.success){
-
-                    	
+                    	that.$Loading.finish();
                     	//对图片进行签名获取
     	        		urllib.request(appServer, {
     	              		method: 'GET'
@@ -70,19 +70,19 @@ var judgeCOU = new Vue({
                     	that.dataSourse.description = response.object.description;
                     	that.submitUrl = config.ajaxUrls.judgeUpdate;
                     }else{
+                    	that.$Loading.error();
 	            		that.$Notice.error({title:response.message});
                     }
                 },
                 error:function(){
+                	that.$Loading.error();
             		that.$Notice.error({title:config.messages.networkError});
                 }
             })
     	}else{
+    		this.$Loading.finish();
     		this.submitUrl = config.ajaxUrls.judgeCreate;
     	}
-    	
-    	
-    	
 //    	富文本框初始化
     	tinymce.init({
             selector: "#description",
@@ -118,7 +118,7 @@ var judgeCOU = new Vue({
     		var img = new Image();
     		img.src = this.imgUrl;
     		this.dataSourse.headicon = this.fileName;
-    		console.log(this.dataSourse);
+    		this.$Loading.start();
     		if(img.width  == img.height){
     			this.dataSourse.description = tinyMCE.editors[0].getContent();
         		var that = this;
@@ -130,23 +130,28 @@ var judgeCOU = new Vue({
         	        data:JSON.stringify(that.dataSourse),
         	        success:function(response){
         	            if(response.success){
+        	            	that.$Loading.finish();
         	                if(that.redirectUrl){
         	                	that.$Notice.success({title:that.successMessage?that.successMessage:config.messages.optSuccRedirect});
         	                    setTimeout(function(){
             	                    window.location.href=that.redirectUrl;
         	                    },3000);
         	                }else{
+        	                	that.$Loading.error();
         	                	that.$Notice.warning({title:that.successMessage?that.successMessage:config.messages.optSuccess});
         	                }
         	            }else{
+        	            	that.$Loading.error();
         	            	that.$Notice.error({title:response.message});
         	            }
         	        },
         	        error:function(){
+        	        	that.$Loading.error();
         	        	that.$Notice.error({title:config.messages.networkError});
         	        }
         	    });
     		}else{
+    			that.$Loading.error();
             	that.$Notice.error({title:"封面图尺寸有误！"});
     		}
     	}

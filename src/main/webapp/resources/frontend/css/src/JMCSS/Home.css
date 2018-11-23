@@ -2,19 +2,27 @@
 /*
  	澶ц禌鐩爣鐨勪竴涓猟iv
  */
-.zyList{
+ [v-cloak]{display:none;}
+ 
+ .newSection{
+ 	color: #5c5c5c; 
+ 	font-size: 30px;
+ 	padding-top: 1rem; 
+ 	margin-left: 50px;
+ } 
+.JMList{
     font-size: 0px;
-    padding: 50px 20px 20px 20px;
+    padding: 1rem 20px 20px 20px;
 }
-.zyList .zyItem{
+.JMList .JMItem{
     width: 31%;
     margin: 1.1%;
 }
-.zyList .zyItem .zyThumb{
+.JMList .JMItem .JMThumb{
 	    width: 90%;
     margin: 0 auto;
 }
-.zyList .zyItem .zyTitle{
+.JMList .JMItem .JMTitle{
     margin: 10px 20px;
     font-size: 18px;
     color: #6d6d6d;
@@ -22,8 +30,8 @@
     overflow: hidden;
     white-space: nowrap;
 }
-.zyList .zyItem .zyDate{
-	    margin-left: 20px;
+.JMList .JMItem .JMDate{
+	margin-left: 20px;
     color: #6d6d6d;
     font-size: 14px;
 }
@@ -41,7 +49,7 @@
     text-align: center!important;
 }
 #JMBtn{
-	     width: 130px;
+	width: 130px;
     height: 40px;
     line-height: 40px;
     display: inline-block;
@@ -50,4 +58,59 @@
     text-align: center;
     color: #fff;
     border: none;
+    margin-top: 1rem;
+    margin-bottom:2rem;
+}
+@media screen and (max-width: 530px){ /*当屏幕尺寸小于530px时，应用下面的CSS样式*/
+ 
+	.newSection{
+	 	font-size: 20px;
+	 	margin-left: 32px;
+	 }
+	.JMList .JMItem .JMTitle{
+	    margin: 10px 5px;
+	    font-size: 14px;
+	}
+	.JMList .JMItem .JMDate{
+		margin-left: 5px;
+	}
+	#JMBtn{
+	    font-size: 14px;
+	}
+}
+
+@media screen and (min-width: 530px) and (max-width: 992px){ /*当屏幕尺寸小于992px时，应用下面的CSS样式*/
+ 
+	.newSection{
+	 	font-size: 24px;
+	 	margin-left: 40px;
+	 }
+	.JMList .JMItem .JMTitle{
+	    margin: 10px 10px;
+	    font-size: 14px;
+	}
+	.JMList .JMItem .JMDate{
+		margin-left: 10px;
+	}
+	#JMBtn{
+	    font-size: 15px;
+	}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px){ /*当屏幕尺寸小于1200px时，应用下面的CSS样式*/
+ 
+	.newSection{
+	 	font-size: 26px;
+	 	margin-left: 40px;
+	 }
+	.JMList .JMItem .JMTitle{
+	    margin: 10px 11px;
+	    font-size: 15px;
+	}
+	.JMList .JMItem .JMDate{
+		margin-left: 11px;
+	}
+	#JMBtn{
+	    font-size: 16px;
+	}
 }

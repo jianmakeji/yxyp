@@ -1,22 +1,3 @@
-$(document).ready(function(){
-	
-	var ua = navigator.userAgent;
-
-	var ipad = ua.match(/(iPad).*OS\s([\d_]+)/),
-
-	isIphone =!ipad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
-
-	isAndroid = ua.match(/(Android)\s+([\d.]+)/),
-
-	isMobile = isIphone || isAndroid;
-	
-	if(isMobile){
-		window.location.href = "/DesignYL/mobile/index";
-	}else{
-
-	}
-})
-
 'use strict';
 	
 var appServer = 'http://localhost:8080/design/sigUploadKey/1';
@@ -55,6 +36,7 @@ var index = new Vue({
 	},
 	created:function(){
 		var that = this;
+		isChorme(that);
 		$.ajax({
             "dataType":'json',
             "type":"post",
@@ -82,7 +64,11 @@ var index = new Vue({
         });		
 	}
 })
-
+function isChorme(that){
+	if(navigator.userAgent.toLowerCase().indexOf("chrome") == -1 && navigator.userAgent.toLowerCase().indexOf("firefox") == -1){
+		that.$Message.error({content:"为了有更好的使用体验，推荐使用谷歌或者火狐浏览器！",closable:true,duration:0});
+	}
+}
 function initClient(creds){
 	var client = new OSS({
 		region: region,

@@ -201,6 +201,7 @@
 					<p class="JMText">9.本活动由大赛组委会负责解释。</p>
 				</div>
 			</div>
+			<hr />
 			
 			<div class="JMSection" id="JMSection9">
 				<div class="JMTitle">

@@ -25,10 +25,10 @@
 	<%@ include file="header.jsp"%>
 	<div class="judgeDetail" :style="judgeDetailStyle" v-cloak>
 		<row type="flex" justify="center">
-	        <i-col span="3">
+	        <i-col :lg="2" :md="3" :sm="3" :xs="4">
 				<img class="zyThumb" :src="judgeHeadicon">
 			</i-col>
-			<i-col span="7">
+			<i-col :lg="8" :md="14" :sm="14" :xs="{span:14,push:1}">
 				<label class="zyTip">${judge.name}</label>
 				<div class="description">${judge.description.replace('../../','')}</div>
 			</i-col>
@@ -71,6 +71,9 @@
 			created:function(){
 				var that = this;
 				this.judgeDetailStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.headHeight - config.cssHeight.footHeight + "px";
+				if(document.documentElement.clientWidth < 530){
+					this.judgeDetailStyle.paddingTop = "30px";
+				}
 				//对图片进行签名获取
         		urllib.request(appServer, {
               		method: 'GET'
@@ -78,7 +81,7 @@
             	  	var creds = JSON.parse(result.data);
             	  	if(creds.success == "true"){
             	  		var client = initClient(creds);
-                	  	 that.judgeHeadicon = client.signatureUrl("judges/"+img, {expires: 3600,process : 'style/thumb-200-200'});	
+                	  	 that.judgeHeadicon = client.signatureUrl("judges/"+img);	
             	  	}
                 });
 			}

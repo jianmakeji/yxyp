@@ -87,6 +87,7 @@ var vm = new Vue({
 		 	this.aoData1[0].value = (index-1)*10;
     		this.dataList = [];
     		var that = this;
+    		this.$Loading.start();
     		$.ajax({
                 "dataType":'json',
                 "type":"post",
@@ -95,8 +96,10 @@ var vm = new Vue({
                 "success": function (response) {
                 	that.dataList = response.aaData;
                     if(response.success===false){
+                    	that.$Loading.error();
 	            		that.$Notice.error({title:response.message});
                     }else{
+                    	that.$Loading.finish();
 //	                    	清空数据盒，装新数据
                     	that.dataList = response.aaData;
                     }
@@ -105,6 +108,7 @@ var vm = new Vue({
 		 },
 		 statusChange:function(index){
 			 var that = this;
+			 this.$Loading.start();
 			 this.aoData2[0].value = this.dataList[index].email;
 			 if(this.dataList[index].valid == 0){
 				 this.aoData2[1].value = 1;
@@ -118,8 +122,10 @@ var vm = new Vue({
 	            "data":this.aoData2,
 	            "success": function (response) {
 	            	if(response.success===false){
+	            		that.$Loading.error();
 	            		that.$Notice.error({title:response.message});
 	                }else{
+	                	that.$Loading.finish();
 	                	that.$Notice.success({title:config.messages.optSuccess});
 	                	$.ajax({
 	                        "dataType":'json',
@@ -142,6 +148,7 @@ var vm = new Vue({
 	 },
 	 created:function(){
 		 var that = this;
+		 this.$Loading.start();
 		 $.ajax({
             "dataType":'json',
             "type":"post",
@@ -149,8 +156,10 @@ var vm = new Vue({
             "data":this.aoData1,
             "success": function (response) {
             	if(response.success===false){
+            		that.$Loading.error();
             		that.$Notice.error({title:response.message});
                 }else{
+                	that.$Loading.finish();
                 	that.dataList = response.aaData;
                 	that.totalPage = response.iTotalRecords;
                 }

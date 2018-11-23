@@ -22,7 +22,7 @@
 
 	<div id="judge" class="JMJudge" v-cloak :style="judgeStyle">
 		<row>
-	        <i-col span="14" push="5">
+	        <i-col :lg="{span:14,push:5}" :md="{span:18,push:3}" :sm="{span:22,push:1}" :xs="24">
 				<ul class="JMList2">
 				   <li class="JMItem" v-for="item in dataList">
 				   		<a class="JMLink" :href="'judge/judgeDetail/' + item.id"> <img class="JMThumb" :src="item.headicon">

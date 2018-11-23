@@ -116,6 +116,7 @@ var Component = new Vue({
     }
 })
 function getPageData(that){
+	that.$Loading.start();
 	$.ajax({
         "dataType":'json',
         "type":"post",
@@ -123,9 +124,10 @@ function getPageData(that){
         "data":that.aoData1,
         "success": function (response) {
             if(response.success===false){
+            	that.$Loading.error();
             	that.$Notice.error({title:response.message});
             }else{
-            	     		
+            	that.$Loading.finish();	
         		//对图片进行签名获取
         		urllib.request(appServer, {
               		method: 'GET'

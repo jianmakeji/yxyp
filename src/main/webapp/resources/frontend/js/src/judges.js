@@ -33,7 +33,6 @@ var judges = new Vue({
                 if(res.success===false){
                 	that.$Notice.error({title:res.message});
                 }else{
-                	console.log(res);
 //                	//对图片进行签名获取
             		urllib.request(appServer, {
                   		method: 'GET'
