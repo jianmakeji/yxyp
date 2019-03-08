@@ -187,12 +187,14 @@ function initClient(creds){
 function multipartUpload(client, files, that, progress){
 	var file = files.target.files[0];
 	var fileName = files.target.files[0].name;
-	client.multipartUpload('news/'+ fileName, file,{
+	calculate_object_name(fileName);
+    var newFilename =  g_object_name;
+	client.multipartUpload('news/'+ newFilename, file,{
 		progress: progress
 	}).then(function (res) {
-		var res = client.signatureUrl('news/' + fileName);
+		var res = client.signatureUrl('news/' + newFilename);
 		that.imgUrl = res;
-		that.fileName = fileName;
+		that.fileName = newFilename;
 	});
 }
 var progress = function (p) {
@@ -201,3 +203,31 @@ var progress = function (p) {
 		done();
 	}
 };
+//文件随机码
+function random_string(len) {
+    var len = len || 32;
+    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = chars.length;
+    var pwd = '';
+    for (var i = 0; i < len; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+function get_suffix(filename) {
+    var pos = filename.lastIndexOf('.')
+    var suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos)
+    }
+    return suffix;
+}
+function calculate_object_name(filename) {
+
+    var suffix = get_suffix(filename)
+    g_object_name = key + random_string(16) + suffix
+
+}
+function get_uploaded_object_name(filename) {
+    return g_object_name;
+}

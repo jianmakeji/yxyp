@@ -294,19 +294,21 @@ function initProductImg(client,pimageArr,that){
 function multipartUpload(client, files, that, progress, p){
 	var file = files.target.files[0];
 	var fileName = files.target.files[0].name;
-	client.multipartUpload('product/'+ fileName, file,{
+	calculate_object_name(fileName);
+    var newFilename =  g_object_name;
+	client.multipartUpload('product/'+ newFilename, file,{
 		progress: progress
 	}).then(function (res) {
-		var res = client.signatureUrl('product/' + fileName);
+		var res = client.signatureUrl('product/' + newFilename);
 		if(p == 'p1'){
 			that.imgUrl_1 = res;
-			that.fileName_1 = fileName;
+			that.fileName_1 = newFilename;
 		}else if(p =='p2'){
 			that.imgUrl_2 = res;
-			that.fileName_2 = fileName;
+			that.fileName_2 = newFilename;
 		}else if(p =='p3'){
 			that.imgUrl_3 = res;
-			that.fileName_3 = fileName;
+			that.fileName_3 = newFilename;
 		}
 	});
 }
@@ -342,7 +344,34 @@ function pimageConcat(that){
 		}
 	}
 }
+//文件随机码
+function random_string(len) {
+    var len = len || 32;
+    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = chars.length;
+    var pwd = '';
+    for (var i = 0; i < len; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+function get_suffix(filename) {
+    var pos = filename.lastIndexOf('.')
+    var suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos)
+    }
+    return suffix;
+}
+function calculate_object_name(filename) {
 
+    var suffix = get_suffix(filename)
+    g_object_name = key + random_string(16) + suffix
+
+}
+function get_uploaded_object_name(filename) {
+    return g_object_name;
+}
 
 
 

@@ -58,8 +58,8 @@
 	            <i-button type="primary" long :disabled="disableSbt" @click="submit('formItem')">提交</i-button>
 	        </form-item>
 	    </i-form>
-	</div> 
-	
+	</div>
+
 	<%@ include file="footer.jsp"%>
 
 	<script>
