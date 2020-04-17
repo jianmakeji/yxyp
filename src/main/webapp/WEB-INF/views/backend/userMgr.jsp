@@ -26,14 +26,11 @@
 	<div class="right">
 		
 		<div class="userMgr" v-cloak>
-			<i-col span="24">用户管理</i-col>
+			<i-col span="24">用户管理</i-col><br/><br/>
 			<i-table :columns="columns" :data="dataList" style="margin-top:20px;width:100%;" ></i-table>
 		    <page v-model="totalPage" :current="1" :total="totalPage" @on-change="pageChange" show-total style="margin-right:60px;margin-top:20px;text-align:right;"></page>
 		</div>
 	</div>
-
-	<%@ include file="loading.jsp"%>
-
 	<script>
 		var pageName = "user";
 	</script>

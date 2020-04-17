@@ -144,6 +144,7 @@ var vm = new Vue({
 	            "data":that.setstatusList,
 	            "success": function (response) {
 	                if(response.success===false){
+	        			that.$Loading.error();
 	                	that.$Notice.error({title:response.message});
 	                	getPageData(that);
 	                }else{
@@ -169,6 +170,7 @@ var vm = new Vue({
 	                	that.$Notice.error({title:"修改出错",desc:"1.作品状态无法选择评审轮次,	2.可能该轮次未绑定评委, 3.分数已更新为本轮次,无法修改"});
 	                	getPageData(that);
 	                }else{
+	                	that.$Loading.finish();
 	                	that.$Notice.success({title:config.messages.optSuccess});
 	                }
 	            }
@@ -240,6 +242,7 @@ var vm = new Vue({
             "data":this.aoData2,
             "success": function (response) {
                 if(response.success===false){
+                	that.$Loading.error();
                 	that.$Notice.error({title:response.message});
                 }else{
                 	that.$Loading.finish();
@@ -251,7 +254,6 @@ var vm = new Vue({
                 		that.roundTypes.push(roundBox);
                 	}
                 }
-//                that.roundModel = "0";
             }
         });	
 		

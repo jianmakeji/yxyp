@@ -26,25 +26,12 @@
 	<div class="right">
 		<!-- 采用iview插件 -->
 		<div class="newsMgr" v-cloak>
-	        <i-col span="24">新闻</i-col>
-	        <modal v-model="deleteModal" @on-ok="ok" title="警告！！！">
-		        <p style="color:#ed3f14;text-align:center">
-		            <Icon type="information-circled"></Icon>
-		            <span style="font-size: 15px;">确定删除新闻:{{newsTitle}}?</span>
-		        </p>
-		    </modal>
-			<!-- <i-button type="primary" icon="plus" @click="createNews">新建</i-button> -->
+	        <i-col span="24">新闻</i-col><br/><br/>
 			<a class="btn btn-primary" href="news/newsCOU"> <span class="glyphicon glyphicon-plus"></span>新建</a>
 			<i-table :columns="columns" :data="dataList" style="margin-top:20px;"></i-table>
 			<page v-model="totalPage" :current="1" :total="totalPage" @on-change="pageChange" show-total style="margin-right:60px;margin-top:20px;text-align:right;"></page>
-		</div>
-		
-		
-		
+		</div>		
 	</div>
-
-
-	<%@ include file="loading.jsp"%>
 
 	<script>
 		var pageName = "news";

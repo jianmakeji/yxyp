@@ -133,20 +133,25 @@ var vm = new Vue({
 	                                   }
 	                               }
 	                           }, '修改'),
-	                           h('Button', {
-	                               props: {
-	                                   type: 'error',
-	                                   size: 'small'
-	                               },
-	                               style: {
-	                                   marginRight: '5px'
+	                           h('poptip',{
+	                        	   props: {
+	                        		   confirm: true,
+	                        		   transfer:true,
+	                        		   title: '确定删除此项？'
 	                               },
 	                               on: {
-	                                   click: () => {
-	                                       this.removeRound(params.index)
+	                            	   "on-ok": () => {
+	                                       this.deleteOK(params.index)
 	                                   }
 	                               }
-	                           }, '删除')
+	                           }, [
+	                               h('Button',{
+	                            	   props: {
+		                                   type: 'error',
+		                                   size: 'small'
+	                            	   }
+	                               },"删除")
+	                           ])
 	                       ]);
 	                   }
 		          }
@@ -163,13 +168,13 @@ var vm = new Vue({
             judgeRoundTitle:"",
 			aoData1:{offset: 0,limit: 100},
 	      	setJudgeData:{
-	      		roundId:0, 			//轮次id		0
-  		      	judges:"",			//确定好的评委id		1	
+	      		roundId:0, 				//轮次id		0
+  		      	judges:"",				//确定好的评委id		1	
   		      	deleteJudges:"",		//改动评委id(删除)	2
   		      	addJudges:""
 	      	},	
 	      	setJudgeData1:{
-	      		id:0, 			//轮次id		0
+	      		id:0, 					//轮次id		0
 	      		judge:""
 	      	}
 		}
@@ -196,23 +201,20 @@ var vm = new Vue({
     		var id = this.dataList[index].id;
     		window.location.href= config.viewUrls.judgeRoundUpdate.replace(":id",id);
 		},
-		removeRound:function(index){
-			this.judgeRoundTitle = this.dataList[index].roundName;
-			this.deleteModal = true;
-			this.index = index;
-		},
-		deleteOK:function(){
-			this.deleteModal = false;
-			var id = this.dataList[this.index].id;
+		deleteOK:function(index){
+			var id = this.dataList[index].id;
         	var that = this;
+        	this.$Loading.start();
         	$.ajax({
                 "dataType":'json',
                 "type":"post",
                 "url":config.ajaxUrls.judgeRoundRemove.replace(":id",id),
                 "success": function (response) {
                     if(response.success===false){
+                    	that.$Loading.error();
                         that.$Notice.error({title:response.message});
                     }else{
+                    	that.$Loading.finish();
                     	that.$Notice.success({title:config.messages.optSuccess});
                     	$.ajax({
                             "dataType":'json',
@@ -360,6 +362,7 @@ var vm = new Vue({
 	},
 	created:function(){
 		var that = this;
+		this.$Loading.start();
 		$.ajax({
             "dataType":'json',
             "type":"get",
@@ -367,8 +370,10 @@ var vm = new Vue({
             "data":that.aoData1,
             "success": function (response) {
             	if(response.success===false){
+            		that.$Loading.error();
             		that.$Notice.error({title:response.message});
                 }else{
+                	that.$Loading.finish();
                 	that.dataList = response.aaData.rjList;
                 	initOtherData(response.aaData.rjList, that.checkAllGroup, that.dataL, that.oldJudgeData);
 //	               	筛选出该轮次有哪些评委,并将id转为name 放在that.dataL中

@@ -76,7 +76,7 @@ img{
 .JMHeader .JMNoticeBoard {
 	border: 2px solid #47a8a9;
 	background-color: #47a8a9;
-	width: 240px;
+	width: 240px;				/* 手机屏幕取40% */
 	height: 60px;
 	position: absolute;
 	top: 30px;
@@ -85,7 +85,6 @@ img{
 }
 .JMHeader .JMNoticeBoard .JMNoticeBoardLeft {
 	color: #47a8a9;
-	font-size: 12px;
 	margin: auto;
 	text-align: center;
 	width: 50%;
@@ -100,7 +99,7 @@ img{
 	color: #fff;
 	line-height: 60px;
 	height: 60px;
-	font-size: 18px;
+	font-size: 18px;			/* 手机屏幕取2vw */
 }
 .JMHeader .JMNoticeBoard .JMNoticeBoardRight {
 	color: #e9608d;
@@ -126,13 +125,13 @@ img{
 }
 .JMHeader .JMNoticeBoard .JMNoticeBoardRight .countDown {
 	color: #47a8a9;
-	font-size: 36px;
+	font-size: 36px;			/* 手机屏幕取2vw */
 	display: block;
 	line-height: 1em;
 }
 /*li閫夐」*/
 .JMHeader .JMTopNav{
-  	width: 40%;
+  	width: 40%;					/* 手机屏幕取100% */
     height: 50px;
     position: absolute;
     right:0;
@@ -148,7 +147,7 @@ img{
     flex-direction: row-reverse;
 }
 .JMMenu .JMItem{
-  width: 15%;
+  	width: 15%;					/* 手机屏幕取25% */	
 	list-style: none;
 	display: inline-block;
 }
@@ -220,4 +219,79 @@ img{
 	background: #363636;
 	color: #fff;
 	text-align: center;
+}
+
+@media screen and (max-width: 530px){ /*当屏幕尺寸小于530px时，应用下面的CSS样式*/
+ 
+	.JMHeader .JMNoticeBoard {
+		width: 40%;				/* 手机屏幕取40% */
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardLeft a {
+		font-size: 2vw;			/* 手机屏幕取2vw */
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardRight .countDown {
+		font-size: 2vw;			/* 手机屏幕取2vw */
+	}
+	/*li閫夐」*/
+	.JMHeader .JMTopNav{
+	  	width: 100%;					/* 手机屏幕取100% */
+	}
+	.JMMenu .JMItem{
+	  	width: 25%;					/* 手机屏幕取25% */	
+	}
+	
+}
+@media screen and (min-width: 530px) and (max-width: 768px){  /* 当屏幕尺寸小于768px时，应用下面的CSS样式 */
+	.JMHeader .JMNoticeBoard {
+		width: 25%;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardLeft a {
+		font-size: 2vw;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardRight .countDown {
+		font-size: 2vw;
+	}
+	
+	.JMHeader .JMTopNav{
+	  	width: 55%;
+	}
+	.JMMenu .JMItem{
+	  	width: 25%;
+	}
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {	/*  当屏幕尺寸小于992px时，应用下面的CSS样式 */
+	.JMHeader .JMNoticeBoard {
+		width: 25%;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardLeft a {
+		font-size: 2vw;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardRight .countDown {
+		font-size: 2vw;
+	}
+	.JMHeader .JMTopNav{
+	  	width: 55%;
+	}
+	.JMMenu .JMItem{
+	  	width: 25%;
+	}
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {	/*  当屏幕尺寸小于992px时，应用下面的CSS样式 */
+	.JMHeader .JMNoticeBoard {
+		width: 240px;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardLeft a {
+		font-size: 2vw;
+	}
+	.JMHeader .JMNoticeBoard .JMNoticeBoardRight .countDown {
+		font-size: 2vw;
+	}
+	.JMHeader .JMTopNav{
+	  	width: 50%;
+	}
+	.JMMenu .JMItem{
+	  	width: 25%;
+	}
 }

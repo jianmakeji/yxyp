@@ -15,6 +15,7 @@ var register = new Vue({
 				mobileCode: '',		//手机验证码
 				address: '',		//地址
 				password: '',		//密码
+				confirmPassword:"",
 				activecode: ''		//图片验证码
             },
             ruleValidate:{

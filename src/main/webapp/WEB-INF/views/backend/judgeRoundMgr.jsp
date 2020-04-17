@@ -25,10 +25,9 @@
 
 	<div class="right">
 			<div class="judgeRoundMgr" v-cloak>
-			<i-col span="24">评审轮次管理</i-col>
+			<i-col span="24">评审轮次管理</i-col><br/><br/>
 			<a class="btn btn-primary" href="roundJudge/judgeRoundCOU"> <span class="glyphicon glyphicon-plus"></span>新建</a>
 			<i-table :columns="columns" :data="dataList" style="margin-top:20px;width:100%;" ></i-table>
-		    <!-- <page v-model="totalPage" :total="totalPage" @on-change="pageChange" show-total style="margin-right:60px;margin-top:20px;text-align:right;"></page> -->
 			<modal v-model="setModal" @on-ok="ok" @on-cancel="cancel">
 		        <p slot="header" style="color:#f60;text-align:center">
 		            <i-con type="information-circled"></Icon>
@@ -39,16 +38,8 @@
 			        <checkbox :label="item.name"></checkbox>
 			    </checkbox-group>
 		    </modal>
-		    <modal v-model="deleteModal" @on-ok="deleteOK" title="警告！！！">
-		        <p style="color:#ed3f14;text-align:center">
-		            <Icon type="information-circled"></Icon>
-		            <span>确定删除评审轮次:{{judgeRoundTitle}}？</span>
-		        </p>
-		    </modal>
 		</div>
 	</div>
-
-	<%@ include file="loading.jsp"%>
 
 	<script>
 		var pageName = "judgeRound";

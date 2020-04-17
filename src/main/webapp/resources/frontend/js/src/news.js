@@ -62,6 +62,7 @@ var news = new Vue({
 	},
 	created:function(){
 		var that = this;
+		smallDeviceHideNewsAbstract();
 		this.newsStyle.minHeight = document.documentElement.clientHeight - config.cssHeight.headHeight - config.cssHeight.footHeight + "px";
     	$.ajax({
             "dataType":'json',
@@ -101,4 +102,11 @@ function initClient(creds){
   		bucket: bucket
 	});
 	return client;
+}
+function smallDeviceHideNewsAbstract(){
+	if(document.documentElement.clientWidth < 530){
+		$(".JMNewsText_content").css({"display":"none"});
+	}else{
+		$(".JMNewsText_content").css({"display":"block"});
+	}
 }

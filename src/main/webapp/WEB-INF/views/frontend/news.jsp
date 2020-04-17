@@ -23,11 +23,11 @@
 	<%@ include file="header.jsp"%>	
 	<div id="news" class="JMNewsList" v-cloak :style="newsStyle">
 		<row>
-	        <i-col span="16" push="4">
+	        <i-col :lg="{span:14,push:5}" :md="{span:22,push:1}" :sm="24" :xs="24">
 				<ul class="JMNewsListUl">
 					<li class="JMNews" v-for="item in dataList">
 						<img :src="item.thumb" />
-						<a class="JMNewsTextBox" :href="'news/newsDetail/'+item.id" target="_blank">
+						<a class="JMNewsTextBox" :href="'news/newsDetail/'+item.id">
 							<span class="JMNewsText_date">{{item.publishTime}}</span>
 							<h3 class="JMNewsText_title">{{item.title}}</h3>
 							<p class="JMNewsText_content">{{item.newsAbstract}}</p>

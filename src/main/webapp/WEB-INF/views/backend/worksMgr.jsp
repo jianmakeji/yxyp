@@ -25,7 +25,7 @@
 
 	<div class="right">		
 		<div class="worksMgr" v-cloak>
-			<i-col span="24">作品管理</i-col>
+			<i-col span="24">作品管理</i-col><br/><br/>
 			<div style="display:inline-block;margin-left:60px;">
 				<label>组别：</label>
 				<i-select v-model="groupModel" style="width:200px" @on-change="groupCheck">
@@ -55,8 +55,6 @@
 		    <page v-model="totalPage" :current="1" :total="totalPage" @on-change="pageChange" show-total style="margin-right:60px;margin-top:20px;text-align:right;"></page>
 		</div>
 	</div>
-
-	<%@ include file="loading.jsp"%>
 	<script>
 		var pageName = "works";
 	</script>

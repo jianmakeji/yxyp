@@ -21,7 +21,7 @@
 	<%@ include file="header.jsp"%>
 	<div class="newsDetail" :style="newsDetailStyle">
 		<row>
-		    <i-col span="14" push="5">
+		    <i-col :lg="{span:14,push:5}" :md="{span:20,push:2}" :sm="24" :xs="24">
 				<h3 class="zyTitle">${news.title}</h3>
 				<p class="zyDate">${fn:substring(news.publishTime, 0, 10)}</p>
 				<div class="zyContent">${news.content.replace('../../','')}</div>

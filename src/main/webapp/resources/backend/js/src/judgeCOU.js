@@ -36,6 +36,7 @@ var judgeCOU = new Vue({
     },
     created:function(){
     	this.dataSourse.id = window.location.href.split("judge/judgeCOU/")[1];
+    	this.$Loading.start();
     	if(this.dataSourse.id){
     		var that = this;
     		var url = config.ajaxUrls.judgeDetail.replace(":id",this.dataSourse.id);
@@ -46,8 +47,7 @@ var judgeCOU = new Vue({
                 data:{id:that.dataSourse.id},
                 success:function(response){
                     if(response.success){
-
-                    	
+                    	that.$Loading.finish();
                     	//对图片进行签名获取
     	        		urllib.request(appServer, {
     	              		method: 'GET'
@@ -70,19 +70,19 @@ var judgeCOU = new Vue({
                     	that.dataSourse.description = response.object.description;
                     	that.submitUrl = config.ajaxUrls.judgeUpdate;
                     }else{
+                    	that.$Loading.error();
 	            		that.$Notice.error({title:response.message});
                     }
                 },
                 error:function(){
+                	that.$Loading.error();
             		that.$Notice.error({title:config.messages.networkError});
                 }
             })
     	}else{
+    		this.$Loading.finish();
     		this.submitUrl = config.ajaxUrls.judgeCreate;
     	}
-    	
-    	
-    	
 //    	富文本框初始化
     	tinymce.init({
             selector: "#description",
@@ -118,7 +118,7 @@ var judgeCOU = new Vue({
     		var img = new Image();
     		img.src = this.imgUrl;
     		this.dataSourse.headicon = this.fileName;
-    		console.log(this.dataSourse);
+    		this.$Loading.start();
     		if(img.width  == img.height){
     			this.dataSourse.description = tinyMCE.editors[0].getContent();
         		var that = this;
@@ -130,23 +130,28 @@ var judgeCOU = new Vue({
         	        data:JSON.stringify(that.dataSourse),
         	        success:function(response){
         	            if(response.success){
+        	            	that.$Loading.finish();
         	                if(that.redirectUrl){
         	                	that.$Notice.success({title:that.successMessage?that.successMessage:config.messages.optSuccRedirect});
         	                    setTimeout(function(){
             	                    window.location.href=that.redirectUrl;
         	                    },3000);
         	                }else{
+        	                	that.$Loading.error();
         	                	that.$Notice.warning({title:that.successMessage?that.successMessage:config.messages.optSuccess});
         	                }
         	            }else{
+        	            	that.$Loading.error();
         	            	that.$Notice.error({title:response.message});
         	            }
         	        },
         	        error:function(){
+        	        	that.$Loading.error();
         	        	that.$Notice.error({title:config.messages.networkError});
         	        }
         	    });
     		}else{
+    			that.$Loading.error();
             	that.$Notice.error({title:"封面图尺寸有误！"});
     		}
     	}
@@ -168,12 +173,14 @@ function initClient(creds){
 function multipartUpload(client, files, that, progress){
 	var file = files.target.files[0];
 	var fileName = files.target.files[0].name;
-	client.multipartUpload('judges/'+ fileName, file,{
+	calculate_object_name(fileName);
+    var newFilename =  g_object_name;
+	client.multipartUpload('judges/'+ newFilename, file,{
 		progress: progress
 	}).then(function (res) {
-		var res = client.signatureUrl('judges/' + fileName);
+		var res = client.signatureUrl('judges/' + newFilename);
 		that.imgUrl = res;
-		that.fileName = fileName;
+		that.fileName = newFilename;
 	});
 }
 var progress = function (p) {
@@ -182,3 +189,31 @@ var progress = function (p) {
 		done();
 	}
 };
+//文件随机码
+function random_string(len) {
+    var len = len || 32;
+    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = chars.length;
+    var pwd = '';
+    for (var i = 0; i < len; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+function get_suffix(filename) {
+    var pos = filename.lastIndexOf('.')
+    var suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos)
+    }
+    return suffix;
+}
+function calculate_object_name(filename) {
+
+    var suffix = get_suffix(filename)
+    g_object_name = key + random_string(16) + suffix
+
+}
+function get_uploaded_object_name(filename) {
+    return g_object_name;
+}

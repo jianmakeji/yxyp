@@ -29,20 +29,12 @@
 		
 		<!-- 采用iview插件 -->
 		<div class="judgeMgr" v-cloak>
-	        <i-col span="24">管理</i-col>
-	        <modal v-model="deleteModal" @on-ok="ok" title="警告！！！">
-		        <p style="color:#ed3f14;text-align:center">
-		            <Icon type="information-circled"></Icon>
-		            <span style="font-size: 15px;">确定删除评委:{{judgeTitle}}？</span>
-		        </p>
-		    </modal>
+	        <i-col span="24">管理</i-col><br/><br/>
 			<a class="btn btn-primary" href="judge/judgeCOU"> <span class="glyphicon glyphicon-plus"></span>新建</a>
 			<i-table :columns="columns" :data="dataList" style="margin-top:20px;"></i-table>
 			<page v-model="totalPage" :current="1" :total="totalPage" @on-change="pageChange" show-total style="margin-right:60px;margin-top:20px;text-align:right;"></page>
 		</div>
 	</div>
-
-	<%@ include file="loading.jsp"%>
 
 	<script>
 		var pageName = "judge";

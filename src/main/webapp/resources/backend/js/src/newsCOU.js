@@ -35,6 +35,7 @@ var Component = new Vue({
     },
     created: function(){
     	this.dataSourse.id = window.location.href.split("news/newsCOU/")[1];
+    	this.$Loading.start();
     	if(this.dataSourse.id){			//修改
     		var that = this;
     		var url = config.ajaxUrls.newsDetail.replace(":id",this.dataSourse.id);
@@ -45,8 +46,7 @@ var Component = new Vue({
                 data:{id:that.dataSourse.id},
                 success:function(response){
                     if(response.success){
-                    	console.log(response);
-                    	
+                    	that.$Loading.finish();
                     	//对图片进行签名获取
     	        		urllib.request(appServer, {
     	              		method: 'GET'
@@ -85,14 +85,17 @@ var Component = new Vue({
                     	that.imgShow = true;
                     	that.submitUrl = config.ajaxUrls.newsUpdate;
                     }else{
+                    	that.$Loading.error();
                     	that.$Notice.error({title:response.message});
                     }
                 },
                 error:function(){
+                	that.$Loading.error();
                 	that.$Notice.error({title:config.messages.networkError});
                 }
             })
     	}else{						//新建
+    		this.$Loading.finish();
     		this.submitUrl = config.ajaxUrls.newsCreate;
     	}
 //    	富文本框初始化
@@ -131,6 +134,7 @@ var Component = new Vue({
     		var img = new Image();
     		img.src = this.imgUrl;
     		this.dataSourse.thumb = this.fileName;
+    		this.$Loading.start();
     		if(img.width == img.height){
     			this.dataSourse.content = tinyMCE.activeEditor.getContent();
         		var that = this;
@@ -142,6 +146,7 @@ var Component = new Vue({
         	        data:JSON.stringify(that.dataSourse),
         	        success:function(response){
         	            if(response.success){
+        	            	that.$Loading.finish();
         	                if(that.redirectUrl){
         	                	that.$Notice.success({title:that.successMessage?that.successMessage:config.messages.optSuccRedirect});
         	                    setTimeout(function(){
@@ -151,14 +156,17 @@ var Component = new Vue({
         	                	that.$Notice.success({title:that.successMessage?that.successMessage:config.messages.optSuccess});
         	                }
         	            }else{
+        	            	that.$Loading.error();
         	            	that.$Notice.error({title:response.message});
         	            }
         	        },
         	        error:function(){
+        	        	that.$Loading.error();
         	        	that.$Notice.error({title:config.messages.networkError});
         	        }
         	    });
     		}else{
+    			that.$Loading.error();
     			this.$Notice.error({title:"封面图尺寸有误！"});
     		}
     	}
@@ -179,12 +187,14 @@ function initClient(creds){
 function multipartUpload(client, files, that, progress){
 	var file = files.target.files[0];
 	var fileName = files.target.files[0].name;
-	client.multipartUpload('news/'+ fileName, file,{
+	calculate_object_name(fileName);
+    var newFilename =  g_object_name;
+	client.multipartUpload('news/'+ newFilename, file,{
 		progress: progress
 	}).then(function (res) {
-		var res = client.signatureUrl('news/' + fileName);
+		var res = client.signatureUrl('news/' + newFilename);
 		that.imgUrl = res;
-		that.fileName = fileName;
+		that.fileName = newFilename;
 	});
 }
 var progress = function (p) {
@@ -193,3 +203,31 @@ var progress = function (p) {
 		done();
 	}
 };
+//文件随机码
+function random_string(len) {
+    var len = len || 32;
+    var chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = chars.length;
+    var pwd = '';
+    for (var i = 0; i < len; i++) {
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+function get_suffix(filename) {
+    var pos = filename.lastIndexOf('.')
+    var suffix = ''
+    if (pos != -1) {
+        suffix = filename.substring(pos)
+    }
+    return suffix;
+}
+function calculate_object_name(filename) {
+
+    var suffix = get_suffix(filename)
+    g_object_name = key + random_string(16) + suffix
+
+}
+function get_uploaded_object_name(filename) {
+    return g_object_name;
+}
